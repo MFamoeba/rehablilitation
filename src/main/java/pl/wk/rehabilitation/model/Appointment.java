@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Appointment {
 
+    private String patientName;
     private String doctorName;
     private LocalDateTime timeStarts;
     
