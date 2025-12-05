@@ -3,7 +3,6 @@ package pl.wk.rehabilitation.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wk.rehabilitation.entity.Appointment;
-import pl.wk.rehabilitation.model.AppointmentDto;
 import pl.wk.rehabilitation.repository.AppointmentRepository;
 
 import java.util.List;
@@ -19,7 +18,7 @@ public class AppointmentService {
     }
 
     public Appointment getById(UUID id){
-        return appointmentRepository.getById(id);
+        return appointmentRepository.findById(id).orElseThrow();
     }
 
     public Appointment update(UUID id, Appointment appointment){

@@ -1,12 +1,9 @@
 package pl.wk.rehabilitation.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 import pl.wk.rehabilitation.entity.Account;
 import pl.wk.rehabilitation.repository.AccountRepository;
-
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
