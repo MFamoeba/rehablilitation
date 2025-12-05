@@ -2,11 +2,11 @@ package pl.wk.rehabilitation.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wk.rehabilitation.model.Appointment;
+import pl.wk.rehabilitation.entity.Appointment;
 import pl.wk.rehabilitation.service.AppointmentService;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/appointments")
@@ -24,8 +24,8 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public Appointment getById(@PathVariable int id){
-        return appointmentService.get(id);
+    public Appointment getById(@PathVariable UUID id){
+        return appointmentService.getById(id);
     }
 
     @PostMapping
@@ -34,12 +34,12 @@ public class AppointmentController {
     }
 
     @PatchMapping("/{id}")
-    public Appointment update(@PathVariable int id, @RequestBody Appointment appointment){
+    public Appointment update(@PathVariable UUID id, @RequestBody Appointment appointment){
         return appointmentService.update(id, appointment);
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id){
+    public void delete(@PathVariable UUID id){
         appointmentService.delete(id);
     }
 }
