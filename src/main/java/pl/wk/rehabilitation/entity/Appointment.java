@@ -30,7 +30,6 @@ public class Appointment extends AbstractEntity {
     private Procedure procedure;
 
     private String room;
-    private Integer duration;
     @Column(length = 1024)
     private String notes;
 
