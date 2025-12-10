@@ -3,6 +3,7 @@ package pl.wk.rehabilitation.controllers;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wk.rehabilitation.entity.Appointment;
+import pl.wk.rehabilitation.model.AppointmentDto;
 import pl.wk.rehabilitation.service.AppointmentService;
 
 import java.util.List;
@@ -29,7 +30,7 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Appointment> createAppointment(@RequestBody Appointment appointment){
+    public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentDto appointment) {
         return ResponseEntity.ok(appointmentService.create(appointment));
     }
 
