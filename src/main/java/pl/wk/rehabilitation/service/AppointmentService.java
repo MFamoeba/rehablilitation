@@ -56,6 +56,8 @@ public class AppointmentService {
         appointmentToCreate.setPatient(patient);
         appointmentToCreate.setStartTime(appointmentDto.getStartTime());
         appointmentToCreate.setProcedure(procedure);
+        appointmentToCreate.setRoom(appointmentDto.getRoom());
+        appointmentToCreate.setAppointmentStatus(AppointmentStatus.SCHEDULED);
         return appointmentRepository.saveAndFlush(appointmentToCreate);
 
     }

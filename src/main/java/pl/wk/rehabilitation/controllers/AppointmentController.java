@@ -33,12 +33,12 @@ public class AppointmentController {
         return ResponseEntity.ok(appointmentService.create(appointment));
     }
 
-    @PatchMapping("/{id}/complete")
+    @PatchMapping("/{appointmentId}/complete")
     public ResponseEntity<Appointment> completeAppointment(@PathVariable UUID appointmentId) {
         return ResponseEntity.ok(appointmentService.updateStatus(appointmentId, AppointmentStatus.COMPLETED));
     }
 
-    @PatchMapping("/{id}/cancel")
+    @PatchMapping("/{appointmentId}/cancel")
     public ResponseEntity<Appointment> cancelAppointment(@PathVariable UUID appointmentId) {
         return ResponseEntity.ok(appointmentService.updateStatus(appointmentId, AppointmentStatus.CANCELLED));
     }
