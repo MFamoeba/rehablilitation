@@ -12,7 +12,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class AppointmentDto {
 
-    private UUID doctor;
+    private UUID therapist;
     private UUID patient;
     private LocalDateTime timeStarts;
     

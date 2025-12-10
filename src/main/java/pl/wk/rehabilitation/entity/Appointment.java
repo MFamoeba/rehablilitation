@@ -20,7 +20,7 @@ public class Appointment extends AbstractEntity {
     @ManyToOne
     Account patient;
     @ManyToOne
-    Account doctor;
+    Therapist therapist;
     LocalDateTime startTime;
 
     @Enumerated(EnumType.STRING)

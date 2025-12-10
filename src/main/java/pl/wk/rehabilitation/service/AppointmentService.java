@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wk.rehabilitation.entity.Account;
 import pl.wk.rehabilitation.entity.Appointment;
+import pl.wk.rehabilitation.entity.Therapist;
 import pl.wk.rehabilitation.model.AppointmentDto;
 import pl.wk.rehabilitation.repository.AccountRepository;
 import pl.wk.rehabilitation.repository.AppointmentRepository;
+import pl.wk.rehabilitation.repository.TherapistRepository;
 import pl.wk.rehabilitation.utill._enum.AppointmentStatus;
 
 import java.util.List;
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final AccountRepository accountRepository;
+    private final TherapistRepository therapistRepository;
 
     public List<Appointment> getAll(){
         return appointmentRepository.findAll();
@@ -34,7 +37,7 @@ public class AppointmentService {
 
     public Appointment update(UUID id, Appointment appointment){
         Appointment appointmentToUpdate = appointmentRepository.findById(id).orElseThrow();
-        appointmentToUpdate.setDoctor(appointment.getDoctor());
+        appointmentToUpdate.setTherapist(appointment.getTherapist());
         appointmentToUpdate.setPatient(appointment.getPatient());
         appointmentToUpdate.setStartTime(appointment.getStartTime());
         return appointmentRepository.saveAndFlush(appointmentToUpdate);
@@ -42,9 +45,9 @@ public class AppointmentService {
 
     public Appointment create(AppointmentDto appointmentDto) {
         Account patient = accountRepository.findById(appointmentDto.getPatient()).orElseThrow();
-        Account doctor = accountRepository.findById(appointmentDto.getDoctor()).orElseThrow();
+        Therapist therapist = therapistRepository.findById(appointmentDto.getTherapist()).orElseThrow();
 
-        Appointment appointmentToCreate = new Appointment(patient, doctor, appointmentDto.getTimeStarts(), AppointmentStatus.SCHEDULED);
+        Appointment appointmentToCreate = new Appointment(patient, therapist, appointmentDto.getTimeStarts(), AppointmentStatus.SCHEDULED);
         return appointmentRepository.saveAndFlush(appointmentToCreate);
 
     }
