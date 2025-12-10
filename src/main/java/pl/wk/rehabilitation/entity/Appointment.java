@@ -18,12 +18,22 @@ import java.time.LocalDateTime;
 @Table(name = "appointment")
 public class Appointment extends AbstractEntity {
     @ManyToOne
-    Account patient;
+    private Account patient;
     @ManyToOne
-    Therapist therapist;
-    LocalDateTime startTime;
+    private Therapist therapist;
+    private LocalDateTime startTime;
 
     @Enumerated(EnumType.STRING)
-    AppointmentStatus appointmentStatus;
+    private AppointmentStatus appointmentStatus;
+
+    @ManyToOne
+    private Procedure procedure;
+
+    private String room;
+    private Integer duration;
+    @Column(length = 1024)
+    private String notes;
+
+
 
 }

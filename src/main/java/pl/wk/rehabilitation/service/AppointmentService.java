@@ -47,7 +47,10 @@ public class AppointmentService {
         Account patient = accountRepository.findById(appointmentDto.getPatient()).orElseThrow();
         Therapist therapist = therapistRepository.findById(appointmentDto.getTherapist()).orElseThrow();
 
-        Appointment appointmentToCreate = new Appointment(patient, therapist, appointmentDto.getTimeStarts(), AppointmentStatus.SCHEDULED);
+        Appointment appointmentToCreate = new Appointment();
+        appointmentToCreate.setTherapist(therapist);
+        appointmentToCreate.setPatient(patient);
+        appointmentToCreate.setStartTime(appointmentDto.getStartTime());
         return appointmentRepository.saveAndFlush(appointmentToCreate);
 
     }
