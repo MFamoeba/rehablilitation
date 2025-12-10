@@ -1,14 +1,11 @@
 package pl.wk.rehabilitation.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.boot.internal.Abstract;
 import pl.wk.rehabilitation.utill.AbstractEntity;
+import pl.wk.rehabilitation.utill._enum.AccountRoleEnum;
 
 import java.util.List;
 
@@ -25,8 +22,9 @@ public class Account extends AbstractEntity {
     private String lastname;
     private String phoneNumber;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    private List<Role> roles;
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private List<AccountRoleEnum> roles;
 
 
 }
