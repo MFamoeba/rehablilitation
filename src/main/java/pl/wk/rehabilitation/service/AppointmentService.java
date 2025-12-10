@@ -7,6 +7,7 @@ import pl.wk.rehabilitation.entity.Appointment;
 import pl.wk.rehabilitation.model.AppointmentDto;
 import pl.wk.rehabilitation.repository.AccountRepository;
 import pl.wk.rehabilitation.repository.AppointmentRepository;
+import pl.wk.rehabilitation.utill._enum.AppointmentStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -25,6 +26,12 @@ public class AppointmentService {
         return appointmentRepository.findById(id).orElseThrow();
     }
 
+    public Appointment updateStatus(UUID id, AppointmentStatus appointmentStatus) {
+        Appointment appointmentToUpdate = appointmentRepository.findById(id).orElseThrow();
+        appointmentToUpdate.setAppointmentStatus(appointmentStatus);
+        return appointmentRepository.saveAndFlush(appointmentToUpdate);
+    }
+
     public Appointment update(UUID id, Appointment appointment){
         Appointment appointmentToUpdate = appointmentRepository.findById(id).orElseThrow();
         appointmentToUpdate.setDoctor(appointment.getDoctor());
@@ -37,7 +44,7 @@ public class AppointmentService {
         Account patient = accountRepository.findById(appointmentDto.getPatient()).orElseThrow();
         Account doctor = accountRepository.findById(appointmentDto.getDoctor()).orElseThrow();
 
-        Appointment appointmentToCreate = new Appointment(patient, doctor, appointmentDto.getTimeStarts());
+        Appointment appointmentToCreate = new Appointment(patient, doctor, appointmentDto.getTimeStarts(), AppointmentStatus.SCHEDULED);
         return appointmentRepository.saveAndFlush(appointmentToCreate);
 
     }

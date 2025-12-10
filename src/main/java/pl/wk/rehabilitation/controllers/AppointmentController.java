@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import pl.wk.rehabilitation.entity.Appointment;
 import pl.wk.rehabilitation.model.AppointmentDto;
 import pl.wk.rehabilitation.service.AppointmentService;
+import pl.wk.rehabilitation.utill._enum.AppointmentStatus;
 
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,16 @@ public class AppointmentController {
     @PostMapping
     public ResponseEntity<Appointment> createAppointment(@RequestBody AppointmentDto appointment) {
         return ResponseEntity.ok(appointmentService.create(appointment));
+    }
+
+    @PatchMapping("/{id}/complete")
+    public ResponseEntity<Appointment> completeAppointment(@PathVariable UUID appointmentId) {
+        return ResponseEntity.ok(appointmentService.updateStatus(appointmentId, AppointmentStatus.COMPLETED));
+    }
+
+    @PatchMapping("/{id}/cancel")
+    public ResponseEntity<Appointment> cancelAppointment(@PathVariable UUID appointmentId) {
+        return ResponseEntity.ok(appointmentService.updateStatus(appointmentId, AppointmentStatus.CANCELLED));
     }
 
     @PatchMapping("/{id}")
