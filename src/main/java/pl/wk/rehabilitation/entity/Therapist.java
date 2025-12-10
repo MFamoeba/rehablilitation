@@ -3,11 +3,13 @@ package pl.wk.rehabilitation.entity;
 import jakarta.persistence.Entity;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.wk.rehabilitation.utill.AbstractEntity;
 
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 public class Therapist extends AbstractEntity {
