@@ -1,5 +1,6 @@
 package pl.wk.rehabilitation.utill;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -20,5 +21,6 @@ public abstract class AbstractEntity {
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     @Column(name = "id", columnDefinition = "UUID", updatable = false)
+    @Schema(hidden = true)
     private UUID id;
 }
