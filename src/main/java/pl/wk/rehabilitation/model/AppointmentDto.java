@@ -14,6 +14,9 @@ public class AppointmentDto {
 
     private UUID therapist;
     private UUID patient;
-    private LocalDateTime timeStarts;
+    private LocalDateTime startTime;
+    private UUID procedure;
+    private String room;
+    private Integer duration;
     
 }
