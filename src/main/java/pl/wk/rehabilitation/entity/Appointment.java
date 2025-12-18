@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 @Table(name = "appointment")
 public class Appointment extends AbstractEntity {
+
     @ManyToOne
     private Account patient;
     @ManyToOne
