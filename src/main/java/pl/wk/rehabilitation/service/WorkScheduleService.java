@@ -10,6 +10,7 @@ import pl.wk.rehabilitation.model.WorkScheduleDto;
 import pl.wk.rehabilitation.repository.TherapistRepository;
 import pl.wk.rehabilitation.repository.WorkScheduleRepository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -32,5 +33,10 @@ public class WorkScheduleService {
     @Transactional
     public void delete(UUID uuid) {
         workScheduleRepository.deleteById(uuid);
+    }
+
+    public List<WorkSchedule> getAllByTherapistId(UUID id) {
+        therapistRepository.findById(id).orElseThrow();
+        return workScheduleRepository.getAllByTherapistId(id);
     }
 }

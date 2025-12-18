@@ -15,11 +15,17 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "workschedule")
+@Table(name = "workschedule",
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"therapist_id", "day_of_week"})
+        }
+)
 public class WorkSchedule extends AbstractEntity {
 
+    @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
+
     private LocalTime startTime;
     private LocalTime endTime;
 

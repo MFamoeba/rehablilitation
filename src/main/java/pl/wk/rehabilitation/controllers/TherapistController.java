@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wk.rehabilitation.entity.Therapist;
+import pl.wk.rehabilitation.entity.WorkSchedule;
 import pl.wk.rehabilitation.service.TherapistService;
+import pl.wk.rehabilitation.service.WorkScheduleService;
 
 import java.util.List;
 import java.util.UUID;
@@ -15,6 +17,7 @@ import java.util.UUID;
 public class TherapistController {
 
     private final TherapistService therapistService;
+    private final WorkScheduleService workScheduleService;
 
     @GetMapping
     public List<Therapist> getAll() {
@@ -24,6 +27,11 @@ public class TherapistController {
     @GetMapping("/{id}")
     public Therapist getById(@PathVariable UUID id) {
         return therapistService.getById(id);
+    }
+
+    @GetMapping("/{id}/schedule")
+    public List<WorkSchedule> getScheduleById(@PathVariable UUID id) {
+        return workScheduleService.getAllByTherapistId(id);
     }
 
     @PostMapping
