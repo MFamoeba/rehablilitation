@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.ams.controllers.entity;
+package pl.wk.rehabilitation.ams.entity;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;

@@ -1,9 +1,9 @@
-package pl.wk.rehabilitation.ams.controllers.service;
+package pl.wk.rehabilitation.ams.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wk.rehabilitation.ams.controllers.entity.Therapist;
-import pl.wk.rehabilitation.ams.controllers.repository.TherapistRepository;
+import pl.wk.rehabilitation.ams.entity.Therapist;
+import pl.wk.rehabilitation.ams.repository.TherapistRepository;
 
 import java.util.List;
 import java.util.UUID;

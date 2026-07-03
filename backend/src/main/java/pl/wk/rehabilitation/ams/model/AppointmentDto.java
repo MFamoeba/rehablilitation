@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.ams.controllers.model;
+package pl.wk.rehabilitation.ams.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

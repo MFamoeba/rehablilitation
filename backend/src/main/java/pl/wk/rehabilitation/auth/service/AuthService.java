@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import pl.wk.rehabilitation.auth.model.AuthenticationRequest;
 import pl.wk.rehabilitation.auth.model.AuthenticationResponse;
 import pl.wk.rehabilitation.auth.model.RegisterRequest;
-import pl.wk.rehabilitation.ams.controllers.entity.Account;
-import pl.wk.rehabilitation.ams.controllers.repository.AccountRepository;
+import pl.wk.rehabilitation.ams.entity.Account;
+import pl.wk.rehabilitation.ams.repository.AccountRepository;
 import pl.wk.rehabilitation.utill._enum.AccountRoleEnum;
 
 import java.util.List;

@@ -1,7 +1,7 @@
-package pl.wk.rehabilitation.ams.controllers.repository;
+package pl.wk.rehabilitation.ams.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import pl.wk.rehabilitation.ams.controllers.entity.Procedure;
+import pl.wk.rehabilitation.ams.entity.Procedure;
 
 import java.util.UUID;
 

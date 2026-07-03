@@ -3,10 +3,10 @@ package pl.wk.rehabilitation.ams.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wk.rehabilitation.ams.controllers.entity.Therapist;
-import pl.wk.rehabilitation.ams.controllers.entity.WorkSchedule;
-import pl.wk.rehabilitation.ams.controllers.service.TherapistService;
-import pl.wk.rehabilitation.ams.controllers.service.WorkScheduleService;
+import pl.wk.rehabilitation.ams.entity.Therapist;
+import pl.wk.rehabilitation.ams.entity.WorkSchedule;
+import pl.wk.rehabilitation.ams.service.TherapistService;
+import pl.wk.rehabilitation.ams.service.WorkScheduleService;
 
 import java.util.List;
 import java.util.UUID;
