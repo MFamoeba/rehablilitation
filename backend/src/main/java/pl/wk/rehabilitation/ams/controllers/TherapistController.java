@@ -1,12 +1,12 @@
-package pl.wk.rehabilitation.controllers;
+package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wk.rehabilitation.entity.Therapist;
-import pl.wk.rehabilitation.entity.WorkSchedule;
-import pl.wk.rehabilitation.service.TherapistService;
-import pl.wk.rehabilitation.service.WorkScheduleService;
+import pl.wk.rehabilitation.ams.controllers.entity.Therapist;
+import pl.wk.rehabilitation.ams.controllers.entity.WorkSchedule;
+import pl.wk.rehabilitation.ams.controllers.service.TherapistService;
+import pl.wk.rehabilitation.ams.controllers.service.WorkScheduleService;
 
 import java.util.List;
 import java.util.UUID;

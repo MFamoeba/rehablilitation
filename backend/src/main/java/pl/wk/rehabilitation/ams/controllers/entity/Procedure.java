@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.entity;
+package pl.wk.rehabilitation.ams.controllers.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

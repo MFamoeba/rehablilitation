@@ -1,10 +1,10 @@
-package pl.wk.rehabilitation.controllers;
+package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wk.rehabilitation.entity.Procedure;
-import pl.wk.rehabilitation.service.ProcedureService;
+import pl.wk.rehabilitation.ams.controllers.entity.Procedure;
+import pl.wk.rehabilitation.ams.controllers.service.ProcedureService;
 
 import java.util.List;
 import java.util.UUID;

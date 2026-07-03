@@ -1,11 +1,11 @@
-package pl.wk.rehabilitation.controllers;
+package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.wk.rehabilitation.entity.Appointment;
-import pl.wk.rehabilitation.model.AppointmentDto;
-import pl.wk.rehabilitation.service.AppointmentService;
+import pl.wk.rehabilitation.ams.controllers.entity.Appointment;
+import pl.wk.rehabilitation.ams.controllers.model.AppointmentDto;
+import pl.wk.rehabilitation.ams.controllers.service.AppointmentService;
 import pl.wk.rehabilitation.utill._enum.AppointmentStatus;
 
 import java.util.List;

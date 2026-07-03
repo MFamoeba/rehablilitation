@@ -1,14 +1,14 @@
-package pl.wk.rehabilitation.service;
+package pl.wk.rehabilitation.ams.controllers.service;
 
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wk.rehabilitation.entity.Therapist;
-import pl.wk.rehabilitation.entity.WorkSchedule;
-import pl.wk.rehabilitation.model.WorkScheduleDto;
-import pl.wk.rehabilitation.repository.TherapistRepository;
-import pl.wk.rehabilitation.repository.WorkScheduleRepository;
+import pl.wk.rehabilitation.ams.controllers.entity.Therapist;
+import pl.wk.rehabilitation.ams.controllers.entity.WorkSchedule;
+import pl.wk.rehabilitation.ams.controllers.model.WorkScheduleDto;
+import pl.wk.rehabilitation.ams.controllers.repository.TherapistRepository;
+import pl.wk.rehabilitation.ams.controllers.repository.WorkScheduleRepository;
 
 import java.util.List;
 import java.util.UUID;

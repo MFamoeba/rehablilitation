@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.controllers;
+package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;

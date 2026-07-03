@@ -1,10 +1,10 @@
-package pl.wk.rehabilitation.service;
+package pl.wk.rehabilitation.ams.controllers.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wk.rehabilitation.entity.*;
-import pl.wk.rehabilitation.model.AppointmentDto;
-import pl.wk.rehabilitation.repository.*;
+import pl.wk.rehabilitation.ams.controllers.entity.*;
+import pl.wk.rehabilitation.ams.controllers.model.AppointmentDto;
+import pl.wk.rehabilitation.ams.controllers.repository.*;
 import pl.wk.rehabilitation.utill._enum.AppointmentStatus;
 
 import java.time.DayOfWeek;

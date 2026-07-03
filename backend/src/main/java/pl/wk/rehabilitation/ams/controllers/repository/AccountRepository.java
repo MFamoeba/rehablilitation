@@ -1,8 +1,8 @@
-package pl.wk.rehabilitation.repository;
+package pl.wk.rehabilitation.ams.controllers.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import pl.wk.rehabilitation.entity.Account;
+import pl.wk.rehabilitation.ams.controllers.entity.Account;
 
 import java.util.Optional;
 import java.util.UUID;

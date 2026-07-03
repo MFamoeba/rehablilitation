@@ -1,9 +1,9 @@
-package pl.wk.rehabilitation.service;
+package pl.wk.rehabilitation.ams.controllers.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wk.rehabilitation.entity.Procedure;
-import pl.wk.rehabilitation.repository.ProcedureRepository;
+import pl.wk.rehabilitation.ams.controllers.entity.Procedure;
+import pl.wk.rehabilitation.ams.controllers.repository.ProcedureRepository;
 
 import java.util.List;
 import java.util.UUID;

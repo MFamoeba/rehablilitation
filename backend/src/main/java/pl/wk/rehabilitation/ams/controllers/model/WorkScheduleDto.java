@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.model;
+package pl.wk.rehabilitation.ams.controllers.model;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
