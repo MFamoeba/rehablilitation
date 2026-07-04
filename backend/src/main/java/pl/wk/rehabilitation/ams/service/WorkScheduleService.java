@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.wk.rehabilitation.ams.entity.Therapist;
 import pl.wk.rehabilitation.ams.entity.WorkSchedule;
-import pl.wk.rehabilitation.ams.model.WorkScheduleDto;
+import pl.wk.rehabilitation.ams.dto.WorkScheduleDto;
 import pl.wk.rehabilitation.ams.repository.TherapistRepository;
 import pl.wk.rehabilitation.ams.repository.WorkScheduleRepository;
 

@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.ams.model;
+package pl.wk.rehabilitation.ams.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

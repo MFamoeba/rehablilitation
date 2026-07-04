@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.ams.model;
+package pl.wk.rehabilitation.ams.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -17,6 +17,5 @@ public class AppointmentDto {
     private LocalDateTime startTime;
     private UUID procedure;
     private String room;
-    private Integer duration;
     
 }
