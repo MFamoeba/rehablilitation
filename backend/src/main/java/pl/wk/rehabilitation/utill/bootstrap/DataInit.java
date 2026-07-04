@@ -1,4 +1,4 @@
-package pl.wk.rehabilitation.bootstrap;
+package pl.wk.rehabilitation.utill.bootstrap;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
