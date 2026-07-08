@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { authService } from '../services/authService';
-import type { AuthenticationRequest } from '../types/types';
+import type { RegisterRequest } from '../types/types';
 import { 
   Box, 
   TextField, 
@@ -10,11 +10,17 @@ import {
   Alert, 
   CircularProgress 
 } from '@mui/material';
-import LoginIcon from '@mui/icons-material/Login';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 
-export const LoginForm: React.FC = () => {
+export const RegisterForm: React.FC = () => {
     const { login } = useAuth();
-    const [formData, setFormData] = useState<AuthenticationRequest>({ email: '', password: '' });
+    const [formData, setFormData] = useState<RegisterRequest>({ 
+        email: '', 
+        password: '',
+        firstName: '', 
+        lastName: '', 
+        phoneNumber: '' 
+    });
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -27,18 +33,23 @@ export const LoginForm: React.FC = () => {
         e.preventDefault();
         setError(null);
 
-        if (!formData.email || !formData.password) {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password || !formData.phoneNumber) {
             setError('Uzupełnij wszystkie pola.');
+            return;
+        }
+
+        if (formData.password.length < 6) {
+            setError('Hasło musi mieć co najmniej 6 znaków.');
             return;
         }
 
         setLoading(true);
 
         try {
-            const data = await authService.login(formData);
+            const data = await authService.register(formData);
             login(data.token);
         } catch (err: any) {
-            setError(err.message || 'Wystąpił nieoczekiwany błąd logowania.');
+            setError(err.message || 'Wystąpił nieoczekiwany błąd podczas rejestracji.');
         } finally {
             setLoading(false);
         }
@@ -57,7 +68,7 @@ export const LoginForm: React.FC = () => {
             }}
         >
             <Typography component="h2" variant="h5" align="center" sx={{ mb: 3, fontWeight: 'bold' }}>
-                Panel Logowania
+                Rejestracja
             </Typography>
 
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
@@ -68,12 +79,49 @@ export const LoginForm: React.FC = () => {
                 )}
                 
                 <TextField
+                    type="text"
+                    id="firstname"
+                    name="firstName"
+                    label="Imię"
+                    value={formData.firstName}
+                    onChange={handleChange}
+                    disabled={loading}
+                    fullWidth
+                    required
+                />
+
+                <TextField
+                    type="text"
+                    id="lastname"
+                    name="lastName"
+                    label="Nazwisko"
+                    value={formData.lastName}
+                    onChange={handleChange}
+                    disabled={loading}
+                    fullWidth
+                    required
+                />
+
+                <TextField
                     type="email"
                     id="email"
                     name="email"
                     label="Email"
                     placeholder="np. jan.kowalski@wp.pl"
                     value={formData.email}
+                    onChange={handleChange}
+                    disabled={loading}
+                    fullWidth
+                    required
+                />
+
+                <TextField
+                    type="tel"
+                    id="phonenumber"
+                    name="phoneNumber"
+                    label="Numer telefonu"
+                    placeholder="np. 123456789"
+                    value={formData.phoneNumber}
                     onChange={handleChange}
                     disabled={loading}
                     fullWidth
@@ -99,12 +147,11 @@ export const LoginForm: React.FC = () => {
                     size="large"
                     disabled={loading}
                     fullWidth
-                    endIcon={loading ? <CircularProgress size={20} color="inherit" /> : <LoginIcon />}
+                    endIcon={loading ? <CircularProgress size={20} color="inherit" /> : <PersonAddIcon />}
                 >
-                    {loading ? 'Logowanie...' : 'Zaloguj się'}
+                    {loading ? 'Rejestrowanie...' : 'Zarejestruj się'}
                 </Button>
             </Box>
         </Box>
     );
-
 };

@@ -21,8 +21,8 @@ public class Account extends AbstractEntity implements UserDetails {
 
     private String email;
     private String password;
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private String phoneNumber;
 
     @ElementCollection(fetch = FetchType.EAGER)
@@ -31,7 +31,7 @@ public class Account extends AbstractEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return email;
+        return getId().toString();
     }
 
     @Override

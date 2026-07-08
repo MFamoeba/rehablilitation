@@ -26,10 +26,11 @@ public class AuthService {
 
     public AuthenticationResponse register(RegisterRequest request) {
         var user = Account.builder()
-                .firstname(request.firstname())
-                .lastname(request.lastname())
+                .firstName(request.firstName())
+                .lastName(request.lastName())
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
+                .phoneNumber(request.phoneNumber())
                 .roles(List.of(AccountRoleEnum.ROLE_USER))
                 .build();
 

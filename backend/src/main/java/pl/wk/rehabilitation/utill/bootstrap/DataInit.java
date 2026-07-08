@@ -34,8 +34,8 @@ public class DataInit implements CommandLineRunner {
             Account admin = Account.builder()
                     .email("admin@wk.pl")
                     .password(passwordEncoder.encode("admin123"))
-                    .firstname("Jan")
-                    .lastname("Kowalski")
+                    .firstName("Jan")
+                    .lastName("Kowalski")
                     .phoneNumber("123456789")
                     .roles(List.of(AccountRoleEnum.ROLE_ADMIN))
                     .build();
@@ -43,8 +43,8 @@ public class DataInit implements CommandLineRunner {
             Account user = Account.builder()
                     .email("user@wk.pl")
                     .password(passwordEncoder.encode("haslo123"))
-                    .firstname("Anna")
-                    .lastname("Nowak")
+                    .firstName("Anna")
+                    .lastName("Nowak")
                     .phoneNumber("987654321")
                     .roles(List.of(AccountRoleEnum.ROLE_USER))
                     .build();
