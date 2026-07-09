@@ -1,11 +1,11 @@
 export const pathnames = {
- unauth: {
+  unauth: {
     login: "/login",
     register: "/register",
+    appointments: "/appointment",
+    therapists: "/therapist",
   },
- auth: {
-    appointments: "/appointments",
+  auth: {
     logout: "/logout",
   },
-
 };

@@ -1,12 +1,12 @@
-import { AuthProvider } from './features/auth/context/AuthContext';
+import { AccountStateContextProvider } from './features/auth/context/AccountStateContext';
 import RouterComponent from "./routes";
 
 
 function App() {
   return (
- <AuthProvider>
+ <AccountStateContextProvider>
       <RouterComponent />
-    </AuthProvider>
+    </AccountStateContextProvider>
   );
 }
 

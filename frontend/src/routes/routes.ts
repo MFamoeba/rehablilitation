@@ -15,8 +15,8 @@ export const SinglePageRoutes: routeType[] = [
     name: "Register",
   },
   {
-    pathname: pathnames.auth.appointments,
+    pathname: pathnames.unauth.appointments,
     page: AppointmentsPage,
     name: "Appointments",
-  }
-]
+  },
+];
