@@ -13,7 +13,9 @@ import pl.wk.rehabilitation.ams.entity.Account;
 import pl.wk.rehabilitation.ams.repository.AccountRepository;
 import pl.wk.rehabilitation.utill._enum.AccountRoleEnum;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +26,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
+
+
     public AuthenticationResponse register(RegisterRequest request) {
         var user = Account.builder()
                 .firstName(request.firstName())
@@ -31,15 +35,17 @@ public class AuthService {
                 .email(request.email())
                 .password(passwordEncoder.encode(request.password()))
                 .phoneNumber(request.phoneNumber())
-                .roles(List.of(AccountRoleEnum.ROLE_USER))
+                .role(AccountRoleEnum.ROLE_USER)
                 .build();
 
-        accountRepository.save(user);
+        user = accountRepository.saveAndFlush(user);
 
         var jwtToken = jwtService.generateToken(user);
 
         return new AuthenticationResponse(jwtToken);
     }
+
+
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
@@ -57,4 +63,6 @@ public class AuthService {
 
         return new AuthenticationResponse(jwtToken);
     }
+
+
 }

@@ -37,7 +37,7 @@ public class DataInit implements CommandLineRunner {
                     .firstName("Jan")
                     .lastName("Kowalski")
                     .phoneNumber("123456789")
-                    .roles(List.of(AccountRoleEnum.ROLE_ADMIN))
+                    .role(AccountRoleEnum.ROLE_ADMIN)
                     .build();
 
             Account user = Account.builder()
@@ -46,7 +46,7 @@ public class DataInit implements CommandLineRunner {
                     .firstName("Anna")
                     .lastName("Nowak")
                     .phoneNumber("987654321")
-                    .roles(List.of(AccountRoleEnum.ROLE_USER))
+                    .role(AccountRoleEnum.ROLE_USER)
                     .build();
 
             accountRepository.saveAll(List.of(admin, user));
