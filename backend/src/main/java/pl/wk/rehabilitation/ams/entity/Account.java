@@ -31,7 +31,7 @@ public class Account extends AbstractEntity implements UserDetails {
 
     @Override
     public String getUsername() {
-        return getEmail().toString();
+        return getEmail();
     }
 
     @Override

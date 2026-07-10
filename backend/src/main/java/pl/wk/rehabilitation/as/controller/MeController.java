@@ -2,10 +2,11 @@ package pl.wk.rehabilitation.as.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 import pl.wk.rehabilitation.ams.entity.Account;
+import pl.wk.rehabilitation.as.dto.GetAccountResponse;
+import pl.wk.rehabilitation.as.dto.UpdateAccountRequest;
 import pl.wk.rehabilitation.as.service.MeService;
 
 @RestController
@@ -16,9 +17,15 @@ public class MeController {
     private final MeService meService;
 
     @GetMapping
-    public ResponseEntity<Account> getMyAccount() throws Exception {
-        return ResponseEntity.ok(meService.getAccount());
+    public ResponseEntity<GetAccountResponse> getMyAccount(Authentication authentication){
+        Account account = (Account) authentication.getPrincipal();
+        return ResponseEntity.ok(GetAccountResponse.from(account));
     }
-    //todo add update
+
+    @PatchMapping
+    public ResponseEntity<GetAccountResponse> updateMyData(@RequestBody UpdateAccountRequest updateAccountRequest, Authentication authentication){
+        Account account = (Account) authentication.getPrincipal();
+        return ResponseEntity.ok(meService.updateAccount(updateAccountRequest, account.getId()));
+    }
 
 }

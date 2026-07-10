@@ -17,7 +17,6 @@ public class TherapistController {
 
     @GetMapping
     public List<Therapist> getAll() {
-
         return therapistService.getAll();
     }
 
