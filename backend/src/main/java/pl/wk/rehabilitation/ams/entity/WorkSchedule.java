@@ -1,10 +1,7 @@
 package pl.wk.rehabilitation.ams.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.wk.rehabilitation.utill.AbstractEntity;
 
 import java.time.DayOfWeek;
@@ -15,12 +12,9 @@ import java.time.LocalTime;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "workschedule",
-        uniqueConstraints = {
-                @UniqueConstraint(columnNames = {"therapist_id", "day_of_week"})
-        }
-)
-public class WorkSchedule extends AbstractEntity {
+@Builder
+@Table(name = "defaultworkschedule")
+public class DefaultWorkSchedule extends AbstractEntity {
 
     @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)

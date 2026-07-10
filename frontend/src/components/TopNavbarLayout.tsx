@@ -14,13 +14,18 @@ import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import LogoutIcon from "@mui/icons-material/Logout";
 import LoginIcon from "@mui/icons-material/Login";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import HealingIcon from "@mui/icons-material/Healing";
+import HistoryIcon from "@mui/icons-material/History";
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
 export default function TopNavbarLayout() {
   const { isAuthenticated, logout } = useAccountState();
   const navigate = useNavigate();
   const location = useLocation();
   const handleLogout = () => {
     logout();
-    navigate(pathnames.unauth.login);
+    navigate(pathnames.public.appointmentBooking);
   };
   return (
     <Box
@@ -48,26 +53,109 @@ export default function TopNavbarLayout() {
             >
               Rehab-System
             </Typography>
-            {isAuthenticated && (
-              <Box sx={{ display: "flex", gap: 2, ml: 4, flexGrow: 1 }}>
-                <Button
-                  startIcon={<CalendarMonthIcon />}
-                  onClick={() => navigate(pathnames.unauth.appointments)}
-                  sx={{
-                    color:
-                      location.pathname === pathnames.unauth.appointments
-                        ? "#1976d2"
-                        : "inherit",
-                    fontWeight:
-                      location.pathname === pathnames.unauth.appointments
-                        ? "bold"
-                        : "normal",
-                  }}
-                >
-                  Moje Wizyty
-                </Button>
-              </Box>
-            )}
+            <Box sx={{ display: "flex", gap: 1.5, ml: 4, flexGrow: 1 }}>
+              <Button
+                startIcon={<CalendarMonthIcon />}
+                onClick={() => navigate(pathnames.public.appointmentBooking)}
+                sx={{
+                  color:
+                    location.pathname === pathnames.public.appointmentBooking
+                      ? "#1976d2"
+                      : "inherit",
+                  fontWeight:
+                    location.pathname === pathnames.public.appointmentBooking
+                      ? "bold"
+                      : "normal",
+                }}
+              >
+                Umów się
+              </Button>
+              <Button
+                startIcon={<MedicalServicesIcon />}
+                onClick={() => navigate(pathnames.public.therapists)}
+                sx={{
+                  color:
+                    location.pathname === pathnames.public.therapists
+                      ? "#1976d2"
+                      : "inherit",
+                  fontWeight:
+                    location.pathname === pathnames.public.therapists
+                      ? "bold"
+                      : "normal",
+                }}
+              >
+                Terapeuci
+              </Button>
+              <Button
+                startIcon={<HealingIcon />}
+                onClick={() => navigate(pathnames.public.treatments)}
+                sx={{
+                  color:
+                    location.pathname === pathnames.public.treatments
+                      ? "#1976d2"
+                      : "inherit",
+                  fontWeight:
+                    location.pathname === pathnames.public.treatments
+                      ? "bold"
+                      : "normal",
+                }}
+              >
+                Zabiegi
+              </Button>
+              {/* DODATKOWE PRZYCISKI DLA ZALOGOWANEGO UŻYTKOWNIKA */}
+              {isAuthenticated && (
+                <>
+                  <Button
+                    startIcon={<HistoryIcon />}
+                    onClick={() => navigate(pathnames.auth.appiontmentHistory)}
+                    sx={{
+                      color:
+                        location.pathname === pathnames.auth.appiontmentHistory
+                          ? "#1976d2"
+                          : "inherit",
+                      fontWeight:
+                        location.pathname === pathnames.auth.appiontmentHistory
+                          ? "bold"
+                          : "normal",
+                    }}
+                  >
+                    Historia wizyt
+                  </Button>
+                  <Button
+                    startIcon={<PersonIcon />}
+                    onClick={() => navigate(pathnames.auth.myAccount)}
+                    sx={{
+                      color:
+                        location.pathname === pathnames.auth.myAccount
+                          ? "#1976d2"
+                          : "inherit",
+                      fontWeight:
+                        location.pathname === pathnames.auth.myAccount
+                          ? "bold"
+                          : "normal",
+                    }}
+                  >
+                    Moje konto
+                  </Button>
+                  <Button
+                    startIcon={<SettingsIcon />}
+                    onClick={() => navigate(pathnames.auth.settings)}
+                    sx={{
+                      color:
+                        location.pathname === pathnames.auth.settings
+                          ? "#1976d2"
+                          : "inherit",
+                      fontWeight:
+                        location.pathname === pathnames.auth.settings
+                          ? "bold"
+                          : "normal",
+                    }}
+                  >
+                    Ustawienia
+                  </Button>
+                </>
+              )}
+            </Box>
             {!isAuthenticated ? (
               <Box sx={{ display: "flex", gap: 1.5 }}>
                 <Button

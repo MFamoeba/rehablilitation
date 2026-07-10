@@ -12,28 +12,13 @@ import { useAccountState } from "../features/auth/context/AccountStateContext";
 import TopNavbarLayout from "@/components/TopNavbarLayout";
 import SidebarLayout from "@/components/SideNavbarLayout";
 import TherapistsPage from "@/pages/TherapistPage";
+import TreatmentsPage from "@/pages/TreatmentsPage";
 
-function AdminDashboardPage() {
-  return (
-    <h2 style={{ fontFamily: "sans-serif" }}>
-      Kokpit Administratora / Managera
-    </h2>
-  );
-}
-function ManageSchedulePage() {
-  return (
-    <h2 style={{ fontFamily: "sans-serif" }}>
-      Zarządzanie Grafikami Fizjoterapeutów
-    </h2>
-  );
-}
-function ManageAccountsPage() {
-  return (
-    <h2 style={{ fontFamily: "sans-serif" }}>
-      Zarządzanie Kontami Użytkowników
-    </h2>
-  );
-}
+import AppointmentHistoryPage from "@/pages/AppointementHistoryPage";
+import MyAccountPage from "@/pages/MyAccountPage";
+import AdminDashboardPage from "@/pages/AdminDashboardPage";
+import AdminSchedulePage from "@/pages/AdminSchedulePage";
+import AdminAccountsPage from "@/pages/AdminAccountsPage";
 
 interface ProtectedRouteProps {
   allowedRoles?: string[];
@@ -46,42 +31,72 @@ function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   }
 
   if (allowedRoles && parsedToken && !allowedRoles.includes(parsedToken.role)) {
-    return <Navigate to={pathnames.unauth.appointments} replace />;
+    return <Navigate to={pathnames.public.appointmentBooking} replace />;
   }
 
   return <Outlet />;
 }
 const router = createBrowserRouter([
   {
+    //public routes accessible to all users
     element: <TopNavbarLayout />,
     children: [
       {
-        path: pathnames.unauth.appointments,
+        path: pathnames.public.appointmentBooking,
         element: <AppointmentsPage />,
       },
       {
-        path: pathnames.unauth.therapists,
+        path: pathnames.public.therapists,
         element: <TherapistsPage />,
+      },
+      {
+        path: pathnames.public.treatments,
+        element: <TreatmentsPage />,
       },
     ],
   },
   {
+    //authenticated routes accessible only to logged-in users
+    element: <ProtectedRoute allowedRoles={["ROLE_USER"]} />,
+    children: [
+      {
+        element: <TopNavbarLayout />,
+        children: [
+          {
+            path: pathnames.auth.appiontmentHistory,
+            element: <AppointmentHistoryPage />,
+          },
+          {
+            path: pathnames.auth.myAccount,
+            element: <MyAccountPage />,
+          },
+          {
+            path: pathnames.auth.settings,
+            element: <MyAccountPage />,
+          },
+        ],
+      },
+    ],
+  },
+
+  {
+    //admin routes accessible only to users with ROLE_ADMIN
     element: <ProtectedRoute allowedRoles={["ROLE_ADMIN", "ROLE_MANAGER"]} />,
     children: [
       {
         element: <SidebarLayout />,
         children: [
           {
-            path: "/admin/dashboard",
+            path: pathnames.admin.dashboard,
             element: <AdminDashboardPage />,
           },
           {
-            path: "/admin/schedule",
-            element: <ManageSchedulePage />,
+            path: pathnames.admin.schedule,
+            element: <AdminSchedulePage />,
           },
           {
-            path: "/admin/accounts",
-            element: <ManageAccountsPage />,
+            path: pathnames.admin.accounts,
+            element: <AdminAccountsPage />,
           },
         ],
       },
@@ -97,7 +112,7 @@ const router = createBrowserRouter([
   },
   {
     path: "*",
-    element: <Navigate to={pathnames.unauth.appointments} replace />,
+    element: <Navigate to={pathnames.public.appointmentBooking} replace />,
   },
 ]);
 export default function RouterComponent() {
