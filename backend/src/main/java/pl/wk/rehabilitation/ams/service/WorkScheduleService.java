@@ -5,12 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import pl.wk.rehabilitation.ams.converter.DefaultWorkScheduleMapper;
-import pl.wk.rehabilitation.ams.dto.DefaultWorkScheduleRequest;
+import pl.wk.rehabilitation.ams.converter.WorkScheduleMapper;
+import pl.wk.rehabilitation.ams.dto.WorkScheduleRequest;
 import pl.wk.rehabilitation.ams.entity.Account;
-import pl.wk.rehabilitation.ams.entity.DefaultWorkSchedule;
+import pl.wk.rehabilitation.ams.entity.WorkSchedule;
 import pl.wk.rehabilitation.ams.entity.Therapist;
-import pl.wk.rehabilitation.ams.repository.DefaultWorkScheduleRepository;
+import pl.wk.rehabilitation.ams.repository.WorkScheduleRepository;
 import pl.wk.rehabilitation.ams.repository.TherapistRepository;
 
 import java.util.List;
@@ -18,31 +18,31 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class DefaultWorkScheduleService {
-    private final DefaultWorkScheduleRepository defaultWorkScheduleRepository;
+public class WorkScheduleService {
+    private final WorkScheduleRepository workScheduleRepository;
     private final TherapistRepository therapistRepository;
-    private final DefaultWorkScheduleMapper defaultWorkScheduleMapper;
+    private final WorkScheduleMapper workScheduleMapper;
 
     @Transactional
-    public void updateDefaultWorkSchedule(DefaultWorkScheduleRequest defaultWorkScheduleRequestDto) {
-        if (defaultWorkScheduleRequestDto.defaultWorkScheduleItemDtos() == null) {
+    public void updateWorkSchedule(WorkScheduleRequest workScheduleRequestDto) {
+        if (workScheduleRequestDto.workScheduleItems() == null) {
             throw new IllegalArgumentException("Lista harmonogramu nie może być pusta");
         }
 
-        Therapist therapist = therapistRepository.findById(defaultWorkScheduleRequestDto.therapistId())
+        Therapist therapist = therapistRepository.findById(workScheduleRequestDto.therapistId())
                 .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono terapeuty o podanym ID"));
 
-        List<DefaultWorkSchedule> defaultWorkScheduleRequests = defaultWorkScheduleRepository.getAllByTherapistId(therapist.getId());
-        defaultWorkScheduleRepository.deleteAll(defaultWorkScheduleRequests);
+        List<WorkSchedule> workScheduleRequests = workScheduleRepository.getAllByTherapistId(therapist.getId());
+        workScheduleRepository.deleteAll(workScheduleRequests);
 
-        List<DefaultWorkSchedule> defaultWorkScheduleToCreate = defaultWorkScheduleRequestDto.defaultWorkScheduleItemDtos().stream()
-                .map(scd -> defaultWorkScheduleMapper.toEntity(scd, therapist))
+        List<WorkSchedule> workScheduleToCreate = workScheduleRequestDto.workScheduleItems().stream()
+                .map(scd -> workScheduleMapper.toEntity(scd, therapist))
                 .toList();
 
-        defaultWorkScheduleRepository.saveAll(defaultWorkScheduleToCreate);
+        workScheduleRepository.saveAll(workScheduleToCreate);
     }
 
-    public DefaultWorkScheduleRequest getDefaultWorkSchedule() {
+    public WorkScheduleRequest getWorkSchedule() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null || !(authentication.getPrincipal() instanceof Account account)) {
             throw new IllegalStateException("Użytkownik nie jest zalogowany");
@@ -50,31 +50,31 @@ public class DefaultWorkScheduleService {
         Therapist therapist = therapistRepository.findByAccountId(account.getId())
                 .orElseThrow(() -> new IllegalArgumentException("Zalogowane konto nie jest powiązane z żadnym terapeutą."));
 
-        List<DefaultWorkSchedule> entities = defaultWorkScheduleRepository.getAllByTherapistId(therapist.getId());
+        List<WorkSchedule> entities = workScheduleRepository.getAllByTherapistId(therapist.getId());
 
-        return defaultWorkScheduleMapper.toRequest(entities, therapist.getId());
+        return workScheduleMapper.toRequest(entities, therapist.getId());
     }
 
-    public void updateDefaultWorkScheduleForTherapist(DefaultWorkScheduleRequest defaultWorkScheduleRequestDto, UUID therapistId) {
-        if (defaultWorkScheduleRequestDto.defaultWorkScheduleItemDtos() == null) {
+    public void updateWorkScheduleForTherapist(WorkScheduleRequest workScheduleRequestDto, UUID therapistId) {
+        if (workScheduleRequestDto.workScheduleItems() == null) {
             throw new IllegalArgumentException("Lista harmonogramu nie może być pusta");
         }
 
         Therapist therapist = therapistRepository.findById(therapistId).orElseThrow();
 
-        List<DefaultWorkSchedule> defaultWorkScheduleRequests = defaultWorkScheduleRepository.getAllByTherapistId(therapist.getId());
-        defaultWorkScheduleRepository.deleteAll(defaultWorkScheduleRequests);
+        List<WorkSchedule> workScheduleRequests = workScheduleRepository.getAllByTherapistId(therapist.getId());
+        workScheduleRepository.deleteAll(workScheduleRequests);
 
-        List<DefaultWorkSchedule> defaultWorkScheduleToCreate = defaultWorkScheduleRequestDto.defaultWorkScheduleItemDtos().stream()
-                .map(scd -> defaultWorkScheduleMapper.toEntity(scd, therapist))
+        List<WorkSchedule> workScheduleToCreate = workScheduleRequestDto.workScheduleItems().stream()
+                .map(scd -> workScheduleMapper.toEntity(scd, therapist))
                 .toList();
 
-        defaultWorkScheduleRepository.saveAll(defaultWorkScheduleToCreate);
+        workScheduleRepository.saveAll(workScheduleToCreate);
     }
 
-    public DefaultWorkScheduleRequest getDefaultWorkScheduleForTherapist(UUID therapistId) {
+    public WorkScheduleRequest getWorkScheduleForTherapist(UUID therapistId) {
         Therapist therapist = therapistRepository.findById(therapistId).orElseThrow();
-        List<DefaultWorkSchedule> entities = defaultWorkScheduleRepository.getAllByTherapistId(therapist.getId());
-        return defaultWorkScheduleMapper.toRequest(entities, therapist.getId());
+        List<WorkSchedule> entities = workScheduleRepository.getAllByTherapistId(therapist.getId());
+        return workScheduleMapper.toRequest(entities, therapist.getId());
     }
 }

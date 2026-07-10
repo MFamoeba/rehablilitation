@@ -1,12 +1,9 @@
 package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.wk.rehabilitation.ams.entity.Therapist;
-import pl.wk.rehabilitation.ams.entity.WorkSchedule;
 import pl.wk.rehabilitation.ams.service.TherapistService;
-import pl.wk.rehabilitation.ams.service.WorkScheduleService;
 
 import java.util.List;
 import java.util.UUID;
@@ -17,10 +14,10 @@ import java.util.UUID;
 public class TherapistController {
 
     private final TherapistService therapistService;
-    private final WorkScheduleService workScheduleService;
 
     @GetMapping
     public List<Therapist> getAll() {
+
         return therapistService.getAll();
     }
 
@@ -28,21 +25,5 @@ public class TherapistController {
     public Therapist getById(@PathVariable UUID id) {
         return therapistService.getById(id);
     }
-
-    @GetMapping("/{id}/schedule")
-    public List<WorkSchedule> getScheduleById(@PathVariable UUID id) {
-        return workScheduleService.getAllByTherapistId(id);
-    }
-
-    @PostMapping
-    public ResponseEntity<Therapist> create(@RequestBody Therapist therapist) {
-        return ResponseEntity.ok(therapistService.create(therapist));
-    }
-
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable UUID id) {
-        therapistService.delete(id);
-    }
-
 
 }

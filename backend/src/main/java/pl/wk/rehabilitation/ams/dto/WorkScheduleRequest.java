@@ -5,5 +5,5 @@ import java.util.UUID;
 
 public record WorkScheduleRequest(
         UUID therapistId,
-        List<WorkScheduleItemDto> workScheduleItemDtos) {
+        List<WorkScheduleItemDto> workScheduleItems) {
 }

@@ -2,7 +2,6 @@ package pl.wk.rehabilitation.ams.dto;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
-import java.util.UUID;
 
 public record WorkScheduleItemDto(
                                      DayOfWeek dayOfWeek,

@@ -2,6 +2,7 @@ package pl.wk.rehabilitation.ams.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.wk.rehabilitation.ams.dto.GetTherapistsRequest;
 import pl.wk.rehabilitation.ams.entity.Therapist;
 import pl.wk.rehabilitation.ams.repository.TherapistRepository;
 
@@ -22,11 +23,4 @@ public class TherapistService {
         return therapistRepository.findById(id).orElseThrow();
     }
 
-    public Therapist create(Therapist therapist) {
-        return therapistRepository.saveAndFlush(therapist);
-    }
-
-    public void delete(UUID id) {
-        therapistRepository.deleteById(id);
-    }
 }

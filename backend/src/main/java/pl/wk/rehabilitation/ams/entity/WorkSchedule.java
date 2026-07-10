@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @Setter
 @Builder
 @Table(name = "defaultworkschedule")
-public class DefaultWorkSchedule extends AbstractEntity {
+public class WorkSchedule extends AbstractEntity {
 
     @Column(name = "day_of_week")
     @Enumerated(EnumType.STRING)
