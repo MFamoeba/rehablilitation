@@ -1,0 +1,14 @@
+export interface userAccountResponse {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}
+
+export interface updateUserAccountRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}

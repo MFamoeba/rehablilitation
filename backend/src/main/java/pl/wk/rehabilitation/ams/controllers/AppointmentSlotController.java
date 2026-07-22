@@ -21,12 +21,20 @@ public class AppointmentSlotController {
     private final AppointmentSlotService appointmentSlotService;
 
 
-    @GetMapping
+    /* @GetMapping
     public ResponseEntity<List<AppointmentSlot>> getAppointmentSlotsForWeek(
             @RequestParam UUID therapistId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate){
 
         return ResponseEntity.ok(appointmentSlotService.getAppointmentSlotsForWeek(therapistId, localDate));
+    } */
+
+    @GetMapping
+    public ResponseEntity<List<AppointmentSlot>> getAppointmentSlotsForDate(
+            @RequestParam UUID therapistId,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate){
+
+        return ResponseEntity.ok(appointmentSlotService.getAppointmentSlotsForDate(therapistId, localDate));
     }
 
     @PostMapping("/{slotId}/book")

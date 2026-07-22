@@ -2,7 +2,8 @@ package pl.wk.rehabilitation.ams.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.wk.rehabilitation.ams.dto.GetTherapistsRequest;
+import pl.wk.rehabilitation.ams.converter.TherapistMapper;
+import pl.wk.rehabilitation.ams.dto.GetTherapistsResponse;
 import pl.wk.rehabilitation.ams.entity.Therapist;
 import pl.wk.rehabilitation.ams.repository.TherapistRepository;
 
@@ -14,13 +15,14 @@ import java.util.UUID;
 public class TherapistService {
 
     private final TherapistRepository therapistRepository;
+    private final TherapistMapper therapistMapper;
 
-    public List<Therapist> getAll() {
-        return therapistRepository.findAll();
+    public List<GetTherapistsResponse> getAll() {
+        return therapistRepository.findAll().stream().map(therapistMapper::toGetTherapistsResponse).toList();
     }
 
-    public Therapist getById(UUID id) {
-        return therapistRepository.findById(id).orElseThrow();
+    public GetTherapistsResponse getById(UUID id) {
+        return therapistMapper.toGetTherapistsResponse(therapistRepository.findById(id).orElseThrow());
     }
 
 }

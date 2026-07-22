@@ -41,6 +41,19 @@ public class AppointmentSlotService {
     );
     }
 
+    public List<AppointmentSlot> getAppointmentSlotsForDate(UUID therapistId, LocalDate localDate) {
+        LocalDateTime startDateTime = localDate.atStartOfDay();
+        LocalDateTime endDateTime = localDate.atTime(LocalTime.MAX);
+
+
+        return appointmentSlotRepository.findByStatusAndTherapistIdAndStartTimeBetween(
+                AppointmentStatusEnum.OPEN,
+                therapistId,
+                startDateTime,
+                endDateTime
+        );
+    }
+
     public AppointmentSlot book(UUID slotId, String userEmail) {
         AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId)
                         .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono terminu."));
