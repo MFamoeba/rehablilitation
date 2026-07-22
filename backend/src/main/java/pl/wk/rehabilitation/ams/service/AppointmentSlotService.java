@@ -1,9 +1,15 @@
 package pl.wk.rehabilitation.ams.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import pl.wk.rehabilitation.ams.converter.AppointmentSlotMapper;
+import pl.wk.rehabilitation.ams.dto.UpdateAppointmentDetailsRequest;
 import pl.wk.rehabilitation.ams.entity.*;
 import pl.wk.rehabilitation.ams.repository.*;
+import pl.wk.rehabilitation.utill._enum.AccountRoleEnum;
 import pl.wk.rehabilitation.utill._enum.AppointmentStatusEnum;
 
 import java.time.DayOfWeek;
@@ -24,57 +30,33 @@ public class AppointmentSlotService {
     private final AccountRepository accountRepository;
     private final TherapistRepository therapistRepository;
     private final WorkScheduleRepository workScheduleRepository;
+    private final AppointmentSlotMapper appointmentMapper;
     private final static Integer LENGTH_OF_SLOT_IN_MINUTES = 30;
 
-    public List<AppointmentSlot> getAppointmentSlotsForWeek(UUID therapistId, LocalDate localDate) {
-        LocalDate startOfWeek = localDate.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        LocalDate endOfWeek = localDate.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
-
-        LocalDateTime startDateTime = startOfWeek.atStartOfDay();
-        LocalDateTime endDateTime = endOfWeek.atTime(LocalTime.MAX);
-
-    return appointmentSlotRepository.findByStatusAndTherapistIdAndStartTimeBetween(
-            AppointmentStatusEnum.OPEN,
-            therapistId,
-            startDateTime,
-            endDateTime
-    );
+    private Therapist getTherapistByUsername(String username) {
+        Account account = accountRepository.findByEmail(username)
+                .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono konta."));
+        return therapistRepository.findByAccountId(account.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Konto nie ma przypisanego profilu terapeuty."));
     }
 
-    public List<AppointmentSlot> getAppointmentSlotsForDate(UUID therapistId, LocalDate localDate) {
-        LocalDateTime startDateTime = localDate.atStartOfDay();
-        LocalDateTime endDateTime = localDate.atTime(LocalTime.MAX);
-
-
-        return appointmentSlotRepository.findByStatusAndTherapistIdAndStartTimeBetween(
-                AppointmentStatusEnum.OPEN,
-                therapistId,
-                startDateTime,
-                endDateTime
-        );
-    }
-
-    public AppointmentSlot book(UUID slotId, String userEmail) {
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public AppointmentSlot book(UUID slotId, String username) {
+        Account account = accountRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono konta."));
         AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId)
                         .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono terminu."));
 
         if (appointmentSlot.getStatus() != AppointmentStatusEnum.OPEN) {
             throw new IllegalStateException("Slot is not open");
         }
-
-        Account user = accountRepository.findByEmail(userEmail)
-                .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono użytkownika."));
-        appointmentSlot.setPatient(user);
+        appointmentSlot.setPatient(account);
         appointmentSlot.setStatus(AppointmentStatusEnum.PENDING);
         return appointmentSlotRepository.saveAndFlush(appointmentSlot);
     }
 
-    public List<AppointmentSlot> getAllAppointmentSlots() {
-        return appointmentSlotRepository.findAll();
-    }
-
-    public void generateSlotsForRange(LocalDate startDate, LocalDate endDate, UUID account_id) {
-        Therapist therapist = therapistRepository.findByAccountId(account_id).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono lekarza."));
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public void generateSlotsForRange(LocalDate startDate, LocalDate endDate, String username) {
+        Therapist therapist = getTherapistByUsername(username);
         List<WorkSchedule> workSchedule = workScheduleRepository.getAllByTherapistId(therapist.getId());
 
         Map<DayOfWeek, List<WorkSchedule>> templateMap = workSchedule.stream()
@@ -116,5 +98,75 @@ public class AppointmentSlotService {
             throw new IllegalStateException("Nie można usunąć terminu, który został już zarezerwowany.");
         }
         appointmentSlotRepository.delete(appointmentSlot);
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public List<AppointmentSlot> getAllAppointmentSlotsForDate(String username, LocalDate localDate) {
+        Account account = accountRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono konta."));
+        if (account.getRole() != AccountRoleEnum.ROLE_DOCTOR) {
+            throw new AccessDeniedException("Brak uprawnień!");
+        }
+        Therapist therapist = therapistRepository.findByAccountId(account.getId()).orElseThrow();
+        LocalDateTime startDateTime = localDate.atStartOfDay();
+        LocalDateTime endDateTime = localDate.atTime(LocalTime.MAX);
+        return appointmentSlotRepository.findByTherapistIdAndStartTimeBetween(
+                    therapist.getId(),
+                    startDateTime,
+                    endDateTime
+            );
+        }
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public AppointmentSlot updateAppointmentDetails(String therapist_username, UUID slotId, UpdateAppointmentDetailsRequest updateAppointmentDetailsRequest) {
+        Therapist therapist = getTherapistByUsername(therapist_username);
+        AppointmentSlot appointmentSlotToUpdate = appointmentSlotRepository.findById(slotId).orElseThrow();
+        if (!appointmentSlotToUpdate.getTherapist().getId().equals(therapist.getId())) throw new AccessDeniedException("Nie masz dostępu do danych tego terminu.");
+        appointmentSlotToUpdate.setStatus(updateAppointmentDetailsRequest.status());
+        appointmentSlotToUpdate.setRoom(updateAppointmentDetailsRequest.room());
+        appointmentSlotToUpdate.setNotes(updateAppointmentDetailsRequest.notes());
+
+        return appointmentSlotRepository.save(appointmentSlotToUpdate);
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public AppointmentSlot getAppointmentDetails(String username, UUID slotId) {
+        Account account = accountRepository.findByEmail(username).orElseThrow();
+        AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId).orElseThrow();
+        if (appointmentSlot.getPatient() != null && account.getId().equals(appointmentSlot.getPatient().getId())){
+            return appointmentSlot;
+        }
+        if (account.getRole() == AccountRoleEnum.ROLE_DOCTOR){
+            Therapist therapist = therapistRepository.findByAccountId(account.getId()).orElseThrow();
+            if (appointmentSlot.getTherapist().getId().equals(therapist.getId())) {
+                return appointmentSlot;
+            }
+        } throw new AccessDeniedException("Nie masz dostępu do danych tego terminu.");
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public List<AppointmentSlot> getAvailableAppointmentSlotsForDate(UUID therapistId, LocalDate localDate) {
+        LocalDateTime startDateTime = localDate.atStartOfDay();
+        LocalDateTime endDateTime = localDate.atTime(LocalTime.MAX);
+
+        return appointmentSlotRepository.findByStatusAndTherapistIdAndStartTimeBetween(
+                AppointmentStatusEnum.OPEN,
+                therapistId,
+                startDateTime,
+                endDateTime
+        );
+    }
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public List<AppointmentSlot> getMyAppointmentHistory(String username) {
+    Account account = accountRepository.findByEmail(username).orElseThrow();
+    return appointmentSlotRepository.findByPatientId(account.getId());
+    }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public List<AppointmentSlot> getPatientAppointmentHistory(String username, UUID patientId) {
+        Therapist therapist = getTherapistByUsername(username);
+        if (!appointmentSlotRepository.existsByPatientIdAndTherapistId(patientId, therapist.getId())) {
+            throw new AccessDeniedException("Nie masz uprawnień, to nie jest Twój pacjent.");
+        }
+    return appointmentSlotRepository.findByPatientId(patientId);
     }
 }

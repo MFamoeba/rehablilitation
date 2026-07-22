@@ -14,4 +14,10 @@ import java.util.UUID;
 public interface AppointmentSlotRepository extends JpaRepository <AppointmentSlot, UUID> {
 
     List<AppointmentSlot> findByStatusAndTherapistIdAndStartTimeBetween(AppointmentStatusEnum appointmentStatusEnum, UUID therapistId, LocalDateTime startOfWeek, LocalDateTime endOfWeek);
+
+    List<AppointmentSlot> findByTherapistIdAndStartTimeBetween(UUID therapistId, LocalDateTime startDateTime, LocalDateTime endDateTime);
+
+    List<AppointmentSlot> findByPatientId(UUID PatientId);
+
+    boolean existsByPatientIdAndTherapistId(UUID patientId, UUID id);
 }

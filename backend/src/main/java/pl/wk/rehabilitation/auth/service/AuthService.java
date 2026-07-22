@@ -6,6 +6,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wk.rehabilitation.auth.model.AuthenticationRequest;
 import pl.wk.rehabilitation.auth.model.AuthenticationResponse;
 import pl.wk.rehabilitation.auth.model.RegisterRequest;
@@ -27,7 +29,7 @@ public class AuthService {
     private final AuthenticationManager authenticationManager;
 
 
-
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
     public AuthenticationResponse register(RegisterRequest request) {
         var user = Account.builder()
                 .firstName(request.firstName())

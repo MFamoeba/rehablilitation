@@ -1,10 +1,12 @@
 package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wk.rehabilitation.ams.dto.UpdateAppointmentDetailsRequest;
 import pl.wk.rehabilitation.ams.entity.Account;
 import pl.wk.rehabilitation.ams.entity.AppointmentSlot;
 import pl.wk.rehabilitation.ams.service.AppointmentSlotService;
@@ -21,61 +23,85 @@ public class AppointmentSlotController {
     private final AppointmentSlotService appointmentSlotService;
 
 
-    /* @GetMapping
-    public ResponseEntity<List<AppointmentSlot>> getAppointmentSlotsForWeek(
-            @RequestParam UUID therapistId,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate){
-
-        return ResponseEntity.ok(appointmentSlotService.getAppointmentSlotsForWeek(therapistId, localDate));
-    } */
-
-    @GetMapping
+    @GetMapping("/available")
     public ResponseEntity<List<AppointmentSlot>> getAppointmentSlotsForDate(
             @RequestParam UUID therapistId,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate localDate){
 
-        return ResponseEntity.ok(appointmentSlotService.getAppointmentSlotsForDate(therapistId, localDate));
+        return ResponseEntity.ok(appointmentSlotService.getAvailableAppointmentSlotsForDate(therapistId, localDate));
     }
 
+
+    @PreAuthorize("hasRole('ROLE_PATIENT')")
     @PostMapping("/{slotId}/book")
     public ResponseEntity<AppointmentSlot> bookAppointmentSlot(
             @PathVariable UUID slotId,
             Authentication authentication){
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
-        String userEmail = authentication.getName();
-        return ResponseEntity.ok(appointmentSlotService.book(slotId, userEmail));
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.book(slotId, username));
     }
 
-    @GetMapping("/temp") ResponseEntity<List<AppointmentSlot>> getAllSlots(){
-        return ResponseEntity.ok(appointmentSlotService.getAllAppointmentSlots());
+    @PreAuthorize("hasRole('ROLE_USER'")
+    @GetMapping("/me/history")
+    public ResponseEntity<List<AppointmentSlot>> getAppointmentHistory(Authentication authentication){
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.getMyAppointmentHistory(username));
+    }
+
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @GetMapping("/patient/{patient_id}/history")
+    public ResponseEntity<List<AppointmentSlot>> getAppointmentHistoryForPatient(Authentication authentication, @PathVariable UUID patient_id){
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.getPatientAppointmentHistory(username, patient_id));
+    }
+
+    @GetMapping("/me/scheduled")
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<List<AppointmentSlot>> getScheduledAppointmentsForDate(
+            Authentication authentication,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate){
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.getAllAppointmentSlotsForDate(username, startDate));
     }
 
 
-    @PostMapping("/generate")
-    //@PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PostMapping("/me/generate")
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
     public ResponseEntity<Void> generateSlots(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
             Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
-        Account account = (Account) authentication.getPrincipal();
-        appointmentSlotService.generateSlotsForRange(startDate, endDate, account.getId());
+        String username = authentication.getName();
+        appointmentSlotService.generateSlotsForRange(startDate, endDate, username);
         return ResponseEntity.ok().build();
     }
 
+    @GetMapping("/{slotId}")
+    @PreAuthorize("hasAnyRole('ROLE_DOCTOR', 'ROLE_PATIENT')")
+    public ResponseEntity<AppointmentSlot> getSlotDetails(
+            Authentication authentication,
+            @PathVariable UUID slotId) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.getAppointmentDetails(username, slotId));
+    }
+
+    @PatchMapping("/{slotId}")
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
+    public ResponseEntity<AppointmentSlot> updateSlotDetails(
+            Authentication authentication,
+            @PathVariable UUID slotId,
+            @RequestBody UpdateAppointmentDetailsRequest updateAppointmentDetailsRequest) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.updateAppointmentDetails(username, slotId, updateAppointmentDetailsRequest));
+    }
+
     @DeleteMapping("/{slotId}")
-    //@PreAuthorize("hasRole('ROLE_DOCTOR')")
+    @PreAuthorize("hasRole('ROLE_DOCTOR')")
     public ResponseEntity<Void> deleteSlot(@PathVariable UUID slotId,
                                            Authentication authentication) {
-        if (authentication == null || !authentication.isAuthenticated())
-            return ResponseEntity.status(401).build();
         Account account = (Account) authentication.getPrincipal();
         appointmentSlotService.deleteSlot(slotId, account.getId());
         return ResponseEntity.ok().build();
     }
-
-
 
 }

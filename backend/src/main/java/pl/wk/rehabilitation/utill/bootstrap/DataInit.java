@@ -28,10 +28,10 @@ public class DataInit implements CommandLineRunner {
 
     private final AccountRepository accountRepository;
     private final TherapistRepository therapistRepository;
-    private final AppointmentSlotRepository appointmentSlotRepository;
     private final PasswordEncoder passwordEncoder;
     private final WorkScheduleRepository workScheduleRepository;
     private final AppointmentSlotService appointmentSlotService;
+    private final AppointmentSlotRepository appointmentSlotRepository;
 
     @Override
     public void run(String... args) throws Exception {
@@ -165,9 +165,32 @@ public class DataInit implements CommandLineRunner {
             ));
 
             LocalDate threeWeeksLater = today.plusWeeks(3);
-            appointmentSlotService.generateSlotsForRange(today, threeWeeksLater, therapistAccount1.getId());
-            appointmentSlotService.generateSlotsForRange(today, threeWeeksLater, therapistAccount2.getId());
+            appointmentSlotService.generateSlotsForRange(today, threeWeeksLater, therapistAccount1.getEmail());
+            appointmentSlotService.generateSlotsForRange(today, threeWeeksLater, therapistAccount2.getEmail());
+            List<AppointmentSlot> allSlots = appointmentSlotRepository.findAll();
 
+
+            if (allSlots.size() > 5) {
+                AppointmentSlot scheduledSlot = allSlots.get(0);
+                scheduledSlot.setPatient(user);
+                scheduledSlot.setStatus(AppointmentStatusEnum.SCHEDULED);
+                scheduledSlot.setNotes("Pacjent skarży się na ostry ból karku.");
+                AppointmentSlot pendingSlot = allSlots.get(1);
+                pendingSlot.setPatient(user);
+                pendingSlot.setStatus(AppointmentStatusEnum.PENDING);
+                AppointmentSlot historySlot1 = allSlots.get(2);
+                historySlot1.setPatient(user);
+                historySlot1.setStatus(AppointmentStatusEnum.COMPLETED);
+                historySlot1.setStartTime(LocalDateTime.now().minusDays(5));
+                historySlot1.setEndTime(LocalDateTime.now().minusDays(5).plusMinutes(30));
+                AppointmentSlot historySlot2 = allSlots.get(3);
+                historySlot2.setPatient(user);
+                historySlot2.setStatus(AppointmentStatusEnum.COMPLETED);
+                historySlot2.setStartTime(LocalDateTime.now().minusDays(14));
+                historySlot2.setEndTime(LocalDateTime.now().minusDays(14).plusMinutes(30));
+                historySlot2.setNotes("Pierwsza diagnoza. Założono kartę pacjenta.");
+                appointmentSlotRepository.saveAll(List.of(scheduledSlot, pendingSlot, historySlot1, historySlot2));
+            }
         }
     }
 }
