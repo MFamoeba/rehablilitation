@@ -7,7 +7,6 @@ export interface userAccountResponse {
 }
 
 export interface updateUserAccountRequest {
-  email: string;
   firstName: string;
   lastName: string;
   phoneNumber: string;

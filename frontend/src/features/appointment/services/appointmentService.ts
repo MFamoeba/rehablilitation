@@ -8,7 +8,7 @@ export const appointmentService = {
     localDate: string,
   ): Promise<AppointmentSlot[]> {
     return apiClient.get<AppointmentSlot[]>(
-      apiEndpoints.appointments.list(therapistId, localDate),
+      apiEndpoints.appointments.listAvailalble(therapistId, localDate),
     );
   },
 

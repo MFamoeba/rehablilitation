@@ -1,3 +1,5 @@
+import { AccountForm } from "@/features/account/components/AccountForm";
+
 export default function MyAccountPage() {
-  return <h1>Moje Konto</h1>;
+  return <AccountForm />;
 }
