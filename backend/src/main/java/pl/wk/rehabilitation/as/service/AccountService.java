@@ -3,6 +3,8 @@ package pl.wk.rehabilitation.as.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pl.wk.rehabilitation.ams.entity.Account;
 import pl.wk.rehabilitation.ams.entity.Therapist;
 import pl.wk.rehabilitation.ams.repository.AccountRepository;
@@ -20,15 +22,18 @@ public class AccountService {
     private final AccountRepository accountRepository;
     private final TherapistRepository therapistRepository;
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
     public List<GetAccountDetailedResponse> getAllAccounts() {
         return accountRepository.findAll().stream().map(GetAccountDetailedResponse::from).toList();
     }
 
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
     public GetAccountDetailedResponse getAccount(UUID accountId) {
         return GetAccountDetailedResponse.from(
                 accountRepository.findById(accountId).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono konta.")));
     }
 
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
     public GetAccountDetailedResponse changeRole(UUID accountId, AccountRoleEnum role) {
         if (role == null) {
             throw new IllegalArgumentException("Nowa rola nie może być pusta.");

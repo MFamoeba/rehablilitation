@@ -88,15 +88,6 @@ public class DataInit implements CommandLineRunner {
             therapistRepository.saveAll(List.of(therapist1, therapist2));
             LocalDate today = LocalDate.now();
 
-            AppointmentSlot slotTodayOpen = AppointmentSlot.builder()
-                    .therapist(therapist1)
-                    .startTime(LocalDateTime.of(today, LocalTime.of(10, 0)))
-                    .endTime(LocalDateTime.of(today, LocalTime.of(11, 0)))
-                    .status(AppointmentStatusEnum.OPEN)
-                    .room("Gabinet 101")
-                    .notes("Standardowa wizyta diagnostyczna.")
-                    .build();
-
             WorkSchedule dws1Monday = WorkSchedule.builder()
                     .therapist(therapist1)
                     .dayOfWeek(DayOfWeek.MONDAY)

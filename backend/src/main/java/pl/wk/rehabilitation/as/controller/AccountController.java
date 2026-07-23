@@ -2,6 +2,8 @@ package pl.wk.rehabilitation.as.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import pl.wk.rehabilitation.as.dto.GetAccountDetailedResponse;
 import pl.wk.rehabilitation.as.dto.GetAccountResponse;
@@ -17,20 +19,21 @@ import java.util.UUID;
 public class AccountController {
     private final AccountService accountService;
 
-    //todo
-    @GetMapping
-    //@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<GetAccountDetailedResponse>> getAllAccounts(){
 
+    @GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<GetAccountDetailedResponse>> getAllAccounts(){
         return ResponseEntity.ok(accountService.getAllAccounts());
     }
 
     @GetMapping("/{account_id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GetAccountDetailedResponse> getAccount(@PathVariable UUID account_id){
         return ResponseEntity.ok(accountService.getAccount(account_id));
     }
 
     @PatchMapping("/{account_id}")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<GetAccountDetailedResponse> changeRole(@PathVariable UUID account_id, @RequestBody AccountRoleEnum role){
         return ResponseEntity.ok(accountService.changeRole(account_id, role));
 
