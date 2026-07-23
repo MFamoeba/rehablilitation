@@ -8,16 +8,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import pl.wk.rehabilitation.auth.model.AuthenticationRequest;
-import pl.wk.rehabilitation.auth.model.AuthenticationResponse;
-import pl.wk.rehabilitation.auth.model.RegisterRequest;
+import pl.wk.rehabilitation.auth.dto.AuthenticationRequest;
+import pl.wk.rehabilitation.auth.dto.AuthenticationResponse;
+import pl.wk.rehabilitation.auth.dto.RegisterRequest;
 import pl.wk.rehabilitation.ams.entity.Account;
 import pl.wk.rehabilitation.ams.repository.AccountRepository;
 import pl.wk.rehabilitation.utill._enum.AccountRoleEnum;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor

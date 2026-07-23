@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import pl.wk.rehabilitation.auth.model.AuthenticationRequest;
-import pl.wk.rehabilitation.auth.model.AuthenticationResponse;
-import pl.wk.rehabilitation.auth.model.RegisterRequest;
+import pl.wk.rehabilitation.auth.dto.AuthenticationRequest;
+import pl.wk.rehabilitation.auth.dto.AuthenticationResponse;
+import pl.wk.rehabilitation.auth.dto.RegisterRequest;
 import pl.wk.rehabilitation.auth.service.AuthService;
 
 @RestController
