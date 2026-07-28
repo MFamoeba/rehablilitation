@@ -5,7 +5,6 @@ export const pathnames = {
   },
   auth: {
     logout: "/logout",
-    appiontmentHistory: "/history",
     myAccount: "/account",
     settings: "/settings",
   },
@@ -14,9 +13,23 @@ export const pathnames = {
     therapists: "/therapist",
     treatments: "/treatments",
   },
+  patient: {
+    appointmentHistory: "/history",
+    appointmentDetails: "/history/:appointmentId",
+  },
+  therapist: {
+    therapistsProfile: "/therapist/me",
+    workSchedule: "/therapist/me/work-schedule",
+    scheduled: "/appointments/me/scheduled",
+    history: "/appointments/me/history",
+    appointmentDetails: "/appointments/:appointmentId",
+  },
   admin: {
-    dashboard: "/admin/dashboard",
-    schedule: "/admin/schedule",
     accounts: "/admin/accounts",
+    procedures: "/admin/procedures",
   },
 };
+export const buildPatientAppointmentLink = (id: string | number) =>
+  `/history/${id}`;
+export const buildTherapistAppointmentLink = (id: string | number) =>
+  `/appointments/${id}`;

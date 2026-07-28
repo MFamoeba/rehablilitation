@@ -1,5 +1,6 @@
 import type { routeType } from "../types/routeType";
 import { pathnames } from "./pathnames";
+
 import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import AppointmentsPage from "../pages/AppointementsPage";
@@ -7,10 +8,9 @@ import TherapistsPage from "@/pages/TherapistPage";
 import ProceduresPage from "@/pages/ProcedurePage";
 import AppointmentHistoryPage from "@/pages/AppointementHistoryPage";
 import MyAccountPage from "@/pages/MyAccountPage";
-import AdminDashboardPage from "@/pages/AdminDashboardPage";
 import AdminAccountsPage from "@/pages/AdminAccountsPage";
+import PlaceholderPage from "@/pages/PlaceHolderPage";
 
-// Single Page Routes (Logowanie/Rejestracja)
 export const SinglePageRoutes: routeType[] = [
   { pathname: pathnames.unauth.login, page: LoginPage, name: "Zaloguj się" },
   {
@@ -19,7 +19,6 @@ export const SinglePageRoutes: routeType[] = [
     name: "Rejestracja",
   },
 ];
-// Publiczne (Dla wszystkich, np. niezalogowanych użytkowników)
 export const PublicRoutes: routeType[] = [
   {
     pathname: pathnames.public.appointmentBooking,
@@ -37,13 +36,8 @@ export const PublicRoutes: routeType[] = [
     name: "Zabiegi",
   },
 ];
-// AUTORYZOWANE (Dla zalogowanych Pacjentów/Lekarzy)
 export const AuthRoutes: routeType[] = [
-  {
-    pathname: pathnames.auth.appiontmentHistory,
-    page: AppointmentHistoryPage,
-    name: "Historia Wizyt",
-  },
+  { pathname: pathnames.auth.logout, page: PlaceholderPage, name: "Wyloguj" },
   {
     pathname: pathnames.auth.myAccount,
     page: MyAccountPage,
@@ -55,16 +49,54 @@ export const AuthRoutes: routeType[] = [
     name: "Ustawienia",
   },
 ];
-// ADMINISTRACYJNE (Dla zalogowanych administratorów)
-export const AdminRoutes: routeType[] = [
+export const PatientRoutes: routeType[] = [
   {
-    pathname: pathnames.admin.dashboard,
-    page: AdminDashboardPage,
-    name: "Panel Główny",
+    pathname: pathnames.patient.appointmentHistory,
+    page: AppointmentHistoryPage,
+    name: "Historia Wizyt",
   },
+  {
+    pathname: pathnames.patient.appointmentDetails,
+    page: PlaceholderPage,
+    name: "Szczegóły Wizyty",
+  },
+];
+export const TherapistRoutes: routeType[] = [
+  {
+    pathname: pathnames.therapist.therapistsProfile,
+    page: PlaceholderPage,
+    name: "Profil Terapeuty",
+  },
+  {
+    pathname: pathnames.therapist.workSchedule,
+    page: PlaceholderPage,
+    name: "Harmonogram Pracy",
+  },
+  {
+    pathname: pathnames.therapist.scheduled,
+    page: PlaceholderPage,
+    name: "Zaplanowane Wizyty",
+  },
+  {
+    pathname: pathnames.therapist.history,
+    page: PlaceholderPage,
+    name: "Historia Wizyt",
+  },
+  {
+    pathname: pathnames.therapist.appointmentDetails,
+    page: PlaceholderPage,
+    name: "Szczegóły Wizyty",
+  },
+];
+export const AdminRoutes: routeType[] = [
   {
     pathname: pathnames.admin.accounts,
     page: AdminAccountsPage,
     name: "Konta",
+  },
+  {
+    pathname: pathnames.admin.procedures,
+    page: ProceduresPage,
+    name: "Zabiegi",
   },
 ];

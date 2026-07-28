@@ -11,3 +11,7 @@ export interface updateUserAccountRequest {
   lastName: string;
   phoneNumber: string;
 }
+
+export interface changeRoleRequest {
+  role: string;
+}

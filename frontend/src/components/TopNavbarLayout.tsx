@@ -10,12 +10,25 @@ import {
   Button,
   Container,
 } from "@mui/material";
+
+const publicNavItems = [
+  { name: "Rezerwacja", path: pathnames.public.appointmentBooking },
+  { name: "Terapeuci", path: pathnames.public.therapists },
+  { name: "Zabiegi", path: pathnames.public.treatments },
+];
+
+const patientNavItems = [
+  { name: "Historia Wizyt", path: pathnames.patient.appointmentHistory },
+  { name: "Moje Konto", path: pathnames.auth.myAccount },
+  { name: "Ustawienia", path: pathnames.auth.settings },
+];
+
 export default function TopNavbarLayout() {
   const { isAuthenticated, logout } = useAccountState();
   const navigate = useNavigate();
   const visibleRoutes = isAuthenticated
-    ? [...PublicRoutes, ...AuthRoutes]
-    : PublicRoutes;
+    ? [...publicNavItems, ...patientNavItems]
+    : publicNavItems;
   const handleLogout = () => {
     logout();
     navigate(pathnames.public.appointmentBooking);
@@ -35,9 +48,9 @@ export default function TopNavbarLayout() {
             <Box sx={{ flexGrow: 1, display: "flex", gap: 2, ml: 4 }}>
               {visibleRoutes.map((route) => (
                 <Button
-                  key={route.pathname}
+                  key={route.path}
                   color="inherit"
-                  onClick={() => navigate(route.pathname)}
+                  onClick={() => navigate(route.path)}
                 >
                   {route.name}
                 </Button>

@@ -10,6 +10,8 @@ import {
   PublicRoutes,
   AuthRoutes,
   AdminRoutes,
+  PatientRoutes,
+  TherapistRoutes,
 } from "./routes";
 import { useAccountState } from "../features/auth/context/AccountStateContext";
 import TopNavbarLayout from "@/components/TopNavbarLayout";
@@ -20,6 +22,9 @@ interface ProtectedRouteProps {
 function ProtectedRoute({ allowedRoles }: ProtectedRouteProps) {
   const { isAuthenticated, parsedToken } = useAccountState();
   if (!isAuthenticated) return <Navigate to={pathnames.unauth.login} replace />;
+  console.log("Moje dozwolone role dla tej ścieżki:", allowedRoles);
+  console.log("Mój sparsowany token to:", parsedToken);
+  console.log("Moja rola z tokena to:", parsedToken?.role);
   if (allowedRoles && parsedToken && !allowedRoles.includes(parsedToken.role)) {
     return <Navigate to={pathnames.public.appointmentBooking} replace />;
   }
@@ -32,7 +37,8 @@ function RoleBasedLayout() {
   const { parsedToken } = useAccountState();
   if (
     parsedToken?.role === "ROLE_ADMIN" ||
-    parsedToken?.role === "ROLE_MANAGER"
+    parsedToken?.role === "ROLE_MANAGER" ||
+    parsedToken?.role === "ROLE_DOCTOR"
   ) {
     return <SidebarLayout />;
   }
@@ -53,6 +59,22 @@ const router = createBrowserRouter([
       {
         element: <ProtectedRoute />,
         children: AuthRoutes.map((route) => ({
+          path: route.pathname,
+          element: <route.page />,
+        })),
+      },
+      // Pacjent
+      {
+        element: <ProtectedRoute allowedRoles={["ROLE_USER"]} />,
+        children: PatientRoutes.map((route) => ({
+          path: route.pathname,
+          element: <route.page />,
+        })),
+      },
+      // Terapeuta
+      {
+        element: <ProtectedRoute allowedRoles={["ROLE_DOCTOR"]} />,
+        children: TherapistRoutes.map((route) => ({
           path: route.pathname,
           element: <route.page />,
         })),

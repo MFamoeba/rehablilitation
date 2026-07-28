@@ -1,3 +1,5 @@
+import { AdminAccountList } from "../features/account/components/AdminAccountList";
+
 export default function AdminAccountsPage() {
-  return <h1> Konta Administracyjne</h1>;
+  return <AdminAccountList />;
 }

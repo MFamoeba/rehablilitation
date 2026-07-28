@@ -1,32 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import { jwtDecode } from "jwt-decode";
+import type { TokenType, AccountState } from "../types";
 
-export interface PersonalAccountType {
-  email: string;
-  firstname: string;
-  lastname: string;
-}
-export interface TokenType {
-  exp: number;
-  iat: number;
-  sub: string; // identyfikator użytkownika
-  email: string;
-  firstname: string;
-  lastname: string;
-  role: string;
-}
-interface AccountState {
-  token: string | null;
-  setToken: (token: string | null) => void;
-  parsedToken: TokenType | null;
-  setParsedToken: (token: TokenType | null) => void;
-  isAuthenticated: boolean;
-  isAdmin: boolean;
-  isManager: boolean;
-  login: (token: string) => void;
-  logout: () => void;
-}
 const AccountStateContext = createContext<AccountState | null>(null);
 export const AccountStateContextProvider = ({
   children,

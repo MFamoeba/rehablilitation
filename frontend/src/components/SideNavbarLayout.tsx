@@ -1,7 +1,6 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAccountState } from "@/features/auth/context/AccountStateContext";
 import { pathnames } from "@/routes/pathnames";
-import { AdminRoutes, AuthRoutes, PublicRoutes } from "@/routes/routes";
 import {
   Box,
   Drawer,
@@ -11,12 +10,41 @@ import {
   ListItemText,
   Typography,
   Button,
+  Divider,
 } from "@mui/material";
-export default function SidebarLayout() {
-  const { logout } = useAccountState();
-  const navigate = useNavigate();
 
-  const allAdminAllowedRoutes = [...AdminRoutes, ...AuthRoutes];
+const adminNavItems = [
+  { name: "Konta użytkowników", path: pathnames.admin.accounts },
+  { name: "Zabiegi", path: pathnames.admin.procedures },
+];
+
+const doctorNavItems = [
+  { name: "Mój Profil", path: pathnames.therapist.therapistsProfile },
+  { name: "Harmonogram Pracy", path: pathnames.therapist.workSchedule },
+  { name: "Zaplanowane Wizyty", path: pathnames.therapist.scheduled },
+  { name: "Historia Wizyt", path: pathnames.therapist.history },
+];
+
+//const managerNavItems = [{ name: "Panel Managera", path: pathnames.manager.dashboard }, ];
+
+const getNavConfig = (role?: string) => {
+  switch (role) {
+    case "ROLE_ADMIN":
+      return { items: adminNavItems, title: "Panel Admina" };
+    // case "ROLE_MANAGER":
+    //    return { items: managerNavItems, title: "Panel Managera" };
+    case "ROLE_DOCTOR":
+      return { items: doctorNavItems, title: "Panel Lekarza" };
+    default:
+      return { items: [], title: "Twój Panel" };
+  }
+};
+export default function SidebarLayout() {
+  const { logout, parsedToken } = useAccountState();
+  const navigate = useNavigate();
+  const { items: navItems, title: panelTitle } = getNavConfig(
+    parsedToken?.role,
+  );
   const handleLogout = () => {
     logout();
     navigate(pathnames.unauth.login);
@@ -31,24 +59,40 @@ export default function SidebarLayout() {
           variant="h6"
           sx={{ p: 2, textAlign: "center", fontWeight: "bold" }}
         >
-          Admin Panel
+          {panelTitle}
         </Typography>
-
+        <Divider />
         <List>
-          {allAdminAllowedRoutes.map((route) => (
-            <ListItem key={route.pathname} disablePadding>
-              <ListItemButton onClick={() => navigate(route.pathname)}>
-                <ListItemText primary={route.name} />
+          {navItems.map((item) => (
+            <ListItem key={item.name} disablePadding>
+              <ListItemButton onClick={() => navigate(item.path)}>
+                <ListItemText primary={item.name} />
               </ListItemButton>
             </ListItem>
           ))}
-        </List>
 
+          <Divider sx={{ my: 1 }} />
+
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => navigate(pathnames.auth.myAccount)}>
+              <ListItemText primary="Moje Konto" />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => navigate(pathnames.auth.settings)}>
+              <ListItemText primary="Ustawienia" />
+            </ListItemButton>
+          </ListItem>
+        </List>
         <Button onClick={handleLogout} color="error" sx={{ mt: "auto", mb: 2 }}>
           Wyloguj się
         </Button>
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+
+      <Box
+        component="main"
+        sx={{ flexGrow: 1, p: 3, backgroundColor: "#f9fafb" }}
+      >
         <Outlet />
       </Box>
     </Box>
