@@ -19,6 +19,10 @@ export const apiEndpoints = {
     list: "/therapist",
     details: (id: string) => `/therapist/${id}`,
   },
+  procedures: {
+    list: "/procedures",
+    details: (id: string) => `/procedures/${id}`,
+  },
   appointments: {
     listAvailalble: (therapistId: string, localDate: string) =>
       `/appointments/available?therapistId=${therapistId}&localDate=${localDate}`,

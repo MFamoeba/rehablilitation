@@ -4,7 +4,7 @@ import LoginPage from "../pages/LoginPage";
 import RegisterPage from "../pages/RegisterPage";
 import AppointmentsPage from "../pages/AppointementsPage";
 import TherapistsPage from "@/pages/TherapistPage";
-import TreatmentsPage from "@/pages/TreatmentsPage";
+import ProceduresPage from "@/pages/ProcedurePage";
 import AppointmentHistoryPage from "@/pages/AppointementHistoryPage";
 import MyAccountPage from "@/pages/MyAccountPage";
 import AdminDashboardPage from "@/pages/AdminDashboardPage";
@@ -33,7 +33,7 @@ export const PublicRoutes: routeType[] = [
   },
   {
     pathname: pathnames.public.treatments,
-    page: TreatmentsPage,
+    page: ProceduresPage,
     name: "Zabiegi",
   },
 ];

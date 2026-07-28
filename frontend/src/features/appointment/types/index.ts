@@ -8,3 +8,13 @@ export interface AppointmentSlot {
   startTime: string;
   endTime: string;
 }
+
+export interface AppointmentSlotDetails {
+  id: string;
+  therapist: Therapist;
+  startTime: string;
+  endTime: string;
+  status: AppointmentStatus;
+  room: string;
+  notes: string;
+}

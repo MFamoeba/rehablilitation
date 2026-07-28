@@ -18,4 +18,10 @@ export const appointmentService = {
       {},
     );
   },
+
+  async getMyAppointmentHistory(): Promise<AppointmentSlot[]> {
+    return apiClient.get<AppointmentSlot[]>(
+      apiEndpoints.appointments.myHistory,
+    );
+  },
 };

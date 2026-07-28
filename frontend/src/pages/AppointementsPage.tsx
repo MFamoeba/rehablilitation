@@ -5,9 +5,11 @@ import AppointmentList from "../features/appointment/components/AppointmentList"
 import AppointmentBookingCard from "../features/appointment/components/AppointmentBookingCard";
 import { appointmentService } from "../features/appointment/services/appointmentService";
 import type { AppointmentSlot } from "../features/appointment/types";
+import ProcedurePicker from "@/features/procedures/components/ProceduresPicker";
 
 export default function AppointmentsPage() {
   const [selectedTherapistId, setSelectedTherapistId] = useState<string>("");
+  const [selectedProcedureId, setSelectedProcedureId] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const today = new Date().toISOString().split("T")[0];
   const [slots, setSlots] = useState<AppointmentSlot[]>([]);
@@ -47,9 +49,9 @@ export default function AppointmentsPage() {
       </div>
       <div>
         <h2>Krok 2: Wybierz zabieg</h2>
-        <TherapistPicker
-          value={selectedTherapistId}
-          onChange={setSelectedTherapistId}
+        <ProcedurePicker
+          value={selectedProcedureId}
+          onChange={setSelectedProcedureId}
         />
       </div>
       <div>
