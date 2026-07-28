@@ -4,14 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
-import pl.wk.rehabilitation.ams.entity.Account;
-import pl.wk.rehabilitation.ams.entity.AppointmentSlot;
-import pl.wk.rehabilitation.ams.entity.WorkSchedule;
-import pl.wk.rehabilitation.ams.entity.Therapist;
-import pl.wk.rehabilitation.ams.repository.AccountRepository; // Zakładam, że masz takie repozytorium
-import pl.wk.rehabilitation.ams.repository.AppointmentSlotRepository;
-import pl.wk.rehabilitation.ams.repository.WorkScheduleRepository;
-import pl.wk.rehabilitation.ams.repository.TherapistRepository;
+import pl.wk.rehabilitation.ams.entity.*;
+import pl.wk.rehabilitation.ams.repository.*;
 import pl.wk.rehabilitation.ams.service.AppointmentSlotService;
 import pl.wk.rehabilitation.utill._enum.AccountRoleEnum;
 import pl.wk.rehabilitation.utill._enum.AppointmentStatusEnum;
@@ -32,11 +26,32 @@ public class DataInit implements CommandLineRunner {
     private final WorkScheduleRepository workScheduleRepository;
     private final AppointmentSlotService appointmentSlotService;
     private final AppointmentSlotRepository appointmentSlotRepository;
+    private final ProcedureRepository procedureRepository;
 
     @Override
     public void run(String... args) throws Exception {
         if (accountRepository.count() == 0) {
-
+            Procedure p1 = new Procedure();
+            p1.setName("Konsultacja fizjoterapeutyczna");
+            p1.setDescription("Pierwsza wizyta obejmująca wywiad, badanie układu ruchu oraz wstępną diagnozę. Ustalenie planu terapii.");
+            p1.setPrice(150.0);
+            Procedure p2 = new Procedure();
+            p2.setName("Terapia manualna");
+            p2.setDescription("Zindywidualizowany zabieg z użyciem technik manualnych, mający na celu poprawę ruchomości stawów, elastyczności tkanek i redukcję bólu.");
+            p2.setPrice(180.0);
+            Procedure p3 = new Procedure();
+            p3.setName("Masaż leczniczy");
+            p3.setDescription("Masaż skupiający się na rozluźnieniu napiętych partii mięśniowych, powięzi, redukcji bólu i poprawie krążenia.");
+            p3.setPrice(120.0);
+            Procedure p4 = new Procedure();
+            p4.setName("Terapia falą uderzeniową");
+            p4.setDescription("Nowoczesna terapia stosowana przy przewlekłym bólu układu mięśniowo-szkieletowego (m.in. ostrogi piętowe, łokieć tenisisty).");
+            p4.setPrice(100.0);
+            Procedure p5 = new Procedure();
+            p5.setName("Kinesiotaping (plastrowanie)");
+            p5.setDescription("Aplikacja specjalnych taśm terapeutycznych wspomagających pracę mięśni i stawów oraz redukujących obrzęki.");
+            p5.setPrice(40.0);
+            procedureRepository.saveAll(List.of(p1, p2, p3, p4, p5));
             Account admin = Account.builder()
                     .email("admin@wk.pl")
                     .password(passwordEncoder.encode("admin123"))
@@ -71,6 +86,7 @@ public class DataInit implements CommandLineRunner {
                     .phoneNumber("444555666")
                     .role(AccountRoleEnum.ROLE_DOCTOR)
                     .build();
+
 
             accountRepository.saveAll(List.of(admin, user, therapistAccount1, therapistAccount2));
 

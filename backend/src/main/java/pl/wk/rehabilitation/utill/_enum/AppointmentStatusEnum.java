@@ -5,5 +5,6 @@ public enum AppointmentStatusEnum {
     PENDING,
     SCHEDULED,
     COMPLETED,
+    PATIENT_ABSENT,
     CANCELLED
 }

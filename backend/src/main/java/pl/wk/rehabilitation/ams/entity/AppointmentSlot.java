@@ -28,14 +28,18 @@ public class AppointmentSlot extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private AppointmentStatusEnum status;
 
-    /*
+
     @ManyToOne
     private Procedure procedure;
-     */
+
+    boolean isPaid;
 
     private String room;
     @Column(length = 1024)
     private String notes;
+
+    private String medicalAdvice;
+
 
 
 

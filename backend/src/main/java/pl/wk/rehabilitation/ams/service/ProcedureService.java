@@ -28,4 +28,9 @@ public class ProcedureService {
     public void delete(UUID id) {
         procedureRepository.deleteById(id);
     }
+
+    public Procedure update(UUID id, Procedure procedure) {
+        procedureRepository.findById(id).orElseThrow();
+        return procedureRepository.saveAndFlush(procedure);
+    }
 }
