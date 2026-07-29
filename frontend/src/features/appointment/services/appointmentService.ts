@@ -1,6 +1,6 @@
 import { apiClient } from "@/api/apiClient";
 import { apiEndpoints } from "@/api/endpoints";
-import type { AppointmentSlot } from "../types";
+import type { AppointmentSlot, AppointmentSlotDetails } from "../types";
 
 export const appointmentService = {
   async getAppointmentSlotsForDate(
@@ -19,8 +19,8 @@ export const appointmentService = {
     );
   },
 
-  async getMyAppointmentHistory(): Promise<AppointmentSlot[]> {
-    return apiClient.get<AppointmentSlot[]>(
+  async getMyAppointmentHistory(): Promise<AppointmentSlotDetails[]> {
+    return apiClient.get<AppointmentSlotDetails[]>(
       apiEndpoints.appointments.myHistory,
     );
   },

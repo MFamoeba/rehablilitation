@@ -1,108 +1,78 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { Container, Typography, Box, TextField, Paper } from "@mui/material";
 import TherapistPicker from "../features/therapist/components/TherapistPicker";
-import { TextField } from "@mui/material";
-import AppointmentList from "../features/appointment/components/AppointmentList";
-import AppointmentBookingCard from "../features/appointment/components/AppointmentBookingCard";
-import { appointmentService } from "../features/appointment/services/appointmentService";
-import type { AppointmentSlot } from "../features/appointment/types";
-import ProcedurePicker from "@/features/procedures/components/ProceduresPicker";
-
+import ProcedurePicker from "../features/procedures/components/ProceduresPicker";
+import AppointmentBookingList from "../features/appointment/components/AppointmentBookingList";
 export default function AppointmentsPage() {
   const [selectedTherapistId, setSelectedTherapistId] = useState<string>("");
   const [selectedProcedureId, setSelectedProcedureId] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const today = new Date().toISOString().split("T")[0];
-  const [slots, setSlots] = useState<AppointmentSlot[]>([]);
-  const [loadingSlots, setLoadingSlots] = useState<boolean>(false);
-  useEffect(() => {
-    if (!selectedTherapistId || !date) {
-      setSlots([]);
-      return;
-    }
-    setLoadingSlots(true);
-    appointmentService
-      .getAppointmentSlotsForDate(selectedTherapistId, date)
-      .then((data) => {
-        setSlots(data);
-        setLoadingSlots(false);
-      })
-      .catch((err) => {
-        console.error("Błąd pobierania slotów", err);
-        setLoadingSlots(false);
-      });
-  }, [selectedTherapistId, date]);
-  const handleBook = (slotId: string) => {
-    appointmentService
-      .bookAppointmentSlot(slotId)
-      .then(() => alert("Rezerwacja udana!"))
-      .catch(() => alert("Błąd rezerwacji"));
-  };
   return (
-    <div>
-      <h1>Umów się na wizytę</h1>
-      <div>
-        <h2>Krok 1: Wybierz terapeutę</h2>
-        <TherapistPicker
-          value={selectedTherapistId}
-          onChange={setSelectedTherapistId}
-        />
-      </div>
-      <div>
-        <h2>Krok 2: Wybierz zabieg</h2>
-        <ProcedurePicker
-          value={selectedProcedureId}
-          onChange={setSelectedProcedureId}
-        />
-      </div>
-      <div>
-        <h2>Krok 3: Wybierz datę</h2>
-        <TextField
-          type="date"
-          label={"Data wizyty"}
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-          fullWidth
-          margin="normal"
-          slotProps={{
-            inputLabel: {
-              shrink: true,
-            },
-            htmlInput: {
-              min: today,
-            },
-          }}
-        />
-      </div>
+    <Container maxWidth="md">
+      <Box sx={{ my: 4, display: "flex", flexDirection: "column", gap: 4 }}>
+        <Typography variant="h4" component="h1" color="primary">
+          Umów się na wizytę
+        </Typography>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Krok 1: Wybierz terapeutę
+          </Typography>
+          <TherapistPicker
+            value={selectedTherapistId}
+            onChange={setSelectedTherapistId}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Krok 2: Wybierz zabieg
+          </Typography>
+          <ProcedurePicker
+            value={selectedProcedureId}
+            onChange={setSelectedProcedureId}
+          />
+        </Box>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Krok 3: Wybierz datę
+          </Typography>
+          <TextField
+            type="date"
+            label="Data wizyty"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+            fullWidth
+            slotProps={{
+              inputLabel: {
+                shrink: true,
+              },
+              htmlInput: {
+                min: today,
+              },
+            }}
+          />
+        </Box>
+        <Paper sx={{ p: 2, bgcolor: "background.default" }} elevation={0}>
+          <Typography variant="body2">
+            <strong>Wybrane ID terapeuty:</strong>{" "}
+            {selectedTherapistId ? selectedTherapistId : "Jeszcze nie wybrano"}
+          </Typography>
+          <Typography variant="body2">
+            <strong>Wybrana data wizyty:</strong>{" "}
+            {date ? date : "Jeszcze nie wybrano"}
+          </Typography>
+        </Paper>
+        <Box>
+          <Typography variant="h6" gutterBottom>
+            Krok 4: Wybierz godzinę
+          </Typography>
 
-      <div>
-        <p>
-          <strong>Wybrane ID terapeuty:</strong>{" "}
-          {selectedTherapistId ? selectedTherapistId : "Jeszcze nie wybrano"}
-        </p>
-        <p>
-          <strong>Wybrana data wizyty:</strong>{" "}
-          {date ? date : "Jeszcze nie wybrano"}
-        </p>
-      </div>
-      <div>
-        <h2>Krok 4: Wybierz godzinę</h2>
-      </div>
-      <div>
-        <p>
-          <strong>Wolne terminy:</strong>
-        </p>
-        <AppointmentList
-          slots={slots}
-          loading={loadingSlots}
-          renderItem={(slot) => (
-            <AppointmentBookingCard
-              key={slot.id}
-              slot={slot}
-              onBook={handleBook}
-            />
-          )}
-        />
-      </div>
-    </div>
+          <AppointmentBookingList
+            therapistId={selectedTherapistId}
+            date={date}
+          />
+        </Box>
+      </Box>
+    </Container>
   );
 }
