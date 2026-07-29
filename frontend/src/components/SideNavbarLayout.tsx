@@ -21,8 +21,7 @@ const adminNavItems = [
 const doctorNavItems = [
   { name: "Mój Profil", path: pathnames.therapist.therapistsProfile },
   { name: "Harmonogram Pracy", path: pathnames.therapist.workSchedule },
-  { name: "Zaplanowane Wizyty", path: pathnames.therapist.scheduled },
-  { name: "Historia Wizyt", path: pathnames.therapist.history },
+  { name: "Wizyty", path: pathnames.therapist.appointmentHistory },
 ];
 
 //const managerNavItems = [{ name: "Panel Managera", path: pathnames.manager.dashboard }, ];

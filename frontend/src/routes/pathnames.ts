@@ -20,8 +20,7 @@ export const pathnames = {
   therapist: {
     therapistsProfile: "/therapist/me",
     workSchedule: "/therapist/me/work-schedule",
-    scheduled: "/appointments/me/scheduled",
-    history: "/appointments/me/history",
+    appointmentHistory: "/appointments/me/history",
     appointmentDetails: "/appointments/:appointmentId",
   },
   admin: {

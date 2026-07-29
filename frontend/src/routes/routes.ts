@@ -10,6 +10,10 @@ import AppointmentHistoryPage from "@/pages/AppointementHistoryPage";
 import MyAccountPage from "@/pages/MyAccountPage";
 import AdminAccountsPage from "@/pages/AdminAccountsPage";
 import PlaceholderPage from "@/pages/PlaceHolderPage";
+import TherapistAppointmentsPage from "@/pages/TherapistAppointmentsPage";
+import TherapistAppointmentDetailsPage from "@/pages/TherapistAppointmentDetailsPage";
+import TherapistProfilePage from "@/pages/TherapistProfilePage";
+import TherapistWorkSchedulePage from "@/pages/ThreapistWorkSchedulePage";
 
 export const SinglePageRoutes: routeType[] = [
   { pathname: pathnames.unauth.login, page: LoginPage, name: "Zaloguj się" },
@@ -64,27 +68,22 @@ export const PatientRoutes: routeType[] = [
 export const TherapistRoutes: routeType[] = [
   {
     pathname: pathnames.therapist.therapistsProfile,
-    page: PlaceholderPage,
+    page: TherapistProfilePage,
     name: "Profil Terapeuty",
   },
   {
     pathname: pathnames.therapist.workSchedule,
-    page: PlaceholderPage,
+    page: TherapistWorkSchedulePage,
     name: "Harmonogram Pracy",
   },
   {
-    pathname: pathnames.therapist.scheduled,
-    page: PlaceholderPage,
+    pathname: pathnames.therapist.appointmentHistory,
+    page: TherapistAppointmentsPage,
     name: "Zaplanowane Wizyty",
   },
   {
-    pathname: pathnames.therapist.history,
-    page: PlaceholderPage,
-    name: "Historia Wizyt",
-  },
-  {
     pathname: pathnames.therapist.appointmentDetails,
-    page: PlaceholderPage,
+    page: TherapistAppointmentDetailsPage,
     name: "Szczegóły Wizyty",
   },
 ];
