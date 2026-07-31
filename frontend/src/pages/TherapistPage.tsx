@@ -14,7 +14,6 @@ export default function TherapistsPage() {
         Poznaj nasz zespół wykwalifikowanych specjalistów gotowych pomóc Ci w
         powrocie do zdrowia.
       </Typography>
-      {/* Wyrenderowanie listy z całego feature-u */}
       <TherapistList />
     </Box>
   );

@@ -1,7 +1,7 @@
 import { Outlet, useNavigate } from "react-router-dom";
 import { useAccountState } from "@/features/auth/context/AccountStateContext";
 import { pathnames } from "@/routes/pathnames";
-import { PublicRoutes, AuthRoutes } from "@/routes/routes";
+
 import {
   Box,
   AppBar,
