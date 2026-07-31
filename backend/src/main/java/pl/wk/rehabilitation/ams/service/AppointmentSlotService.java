@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wk.rehabilitation.ams.converter.AppointmentSlotMapper;
+import pl.wk.rehabilitation.ams.dto.GetDetailedAppointmentSlotResponse;
 import pl.wk.rehabilitation.ams.dto.UpdateAppointmentDetailsRequest;
 import pl.wk.rehabilitation.ams.entity.*;
 import pl.wk.rehabilitation.ams.repository.*;
@@ -101,7 +102,7 @@ public class AppointmentSlotService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
-    public List<AppointmentSlot> getAllAppointmentSlotsForDate(String username, LocalDate localDate) {
+    public List<GetDetailedAppointmentSlotResponse> getAllAppointmentSlotsForDate(String username, LocalDate localDate) {
         Account account = accountRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono konta."));
         if (account.getRole() != AccountRoleEnum.ROLE_DOCTOR) {
             throw new AccessDeniedException("Brak uprawnień!");
@@ -113,7 +114,7 @@ public class AppointmentSlotService {
                     therapist.getId(),
                     startDateTime,
                     endDateTime
-            );
+            ).stream().map(appointmentMapper::toDetailedResponse).toList();
         }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
@@ -129,16 +130,16 @@ public class AppointmentSlotService {
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
-    public AppointmentSlot getAppointmentDetails(String username, UUID slotId) {
+    public GetDetailedAppointmentSlotResponse getAppointmentDetails(String username, UUID slotId) {
         Account account = accountRepository.findByEmail(username).orElseThrow();
         AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId).orElseThrow();
         if (appointmentSlot.getPatient() != null && account.getId().equals(appointmentSlot.getPatient().getId())){
-            return appointmentSlot;
+            return appointmentMapper.toDetailedResponse(appointmentSlot);
         }
         if (account.getRole() == AccountRoleEnum.ROLE_DOCTOR){
             Therapist therapist = therapistRepository.findByAccountId(account.getId()).orElseThrow();
             if (appointmentSlot.getTherapist().getId().equals(therapist.getId())) {
-                return appointmentSlot;
+                return appointmentMapper.toDetailedResponse(appointmentSlot);
             }
         } throw new AccessDeniedException("Nie masz dostępu do danych tego terminu.");
     }
@@ -156,17 +157,25 @@ public class AppointmentSlotService {
         );
     }
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
-    public List<AppointmentSlot> getMyAppointmentHistory(String username) {
+    public List<GetDetailedAppointmentSlotResponse> getMyAppointmentHistory(String username) {
     Account account = accountRepository.findByEmail(username).orElseThrow();
-    return appointmentSlotRepository.findByPatientId(account.getId());
+    LocalDateTime today = LocalDateTime.now();
+    return appointmentSlotRepository.findAllByPatientIdAndStartTimeBeforeOrderByStartTimeDesc(account.getId(), today).stream().map(appointmentMapper::toDetailedResponse).toList();
     }
 
     @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
-    public List<AppointmentSlot> getPatientAppointmentHistory(String username, UUID patientId) {
+    public List<GetDetailedAppointmentSlotResponse> getPatientAppointmentHistory(String username, UUID patientId) {
         Therapist therapist = getTherapistByUsername(username);
         if (!appointmentSlotRepository.existsByPatientIdAndTherapistId(patientId, therapist.getId())) {
             throw new AccessDeniedException("Nie masz uprawnień, to nie jest Twój pacjent.");
         }
-    return appointmentSlotRepository.findByPatientId(patientId);
+        LocalDateTime today = LocalDateTime.now();
+    return appointmentSlotRepository.findAllByPatientIdAndStartTimeBeforeOrderByStartTimeDesc(patientId, today).stream().map(appointmentMapper::toDetailedResponse).toList();
+    }
+
+    public List<GetDetailedAppointmentSlotResponse> getMyAppointmentPlanned(String username) {
+        Account account = accountRepository.findByEmail(username).orElseThrow();
+        LocalDateTime today = LocalDateTime.now();
+        return appointmentSlotRepository.findAllByPatientIdAndStartTimeGreaterThanEqualOrderByStartTimeAsc(account.getId(), today).stream().map(appointmentMapper::toDetailedResponse).toList();
     }
 }

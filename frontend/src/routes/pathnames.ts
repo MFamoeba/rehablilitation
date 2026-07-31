@@ -15,6 +15,7 @@ export const pathnames = {
   },
   patient: {
     appointmentHistory: "/history",
+    appointmentPlanned: "/planned",
     appointmentDetails: "/history/:appointmentId",
   },
   therapist: {

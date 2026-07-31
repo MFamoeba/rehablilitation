@@ -1,3 +1,4 @@
+import type { basicUserDto } from "@/features/account/types";
 import type { Procedure } from "@/features/procedures/types";
 import type { Therapist } from "@/features/therapist/types";
 
@@ -6,8 +7,7 @@ export type AppointmentStatus =
   | "PENDING"
   | "SCHEDULED"
   | "COMPLETED"
-  | "PATIENT_ABSENT"
-  | "CANCELLED";
+  | "PATIENT_ABSENT";
 
 export interface AppointmentSlot {
   id: string;
@@ -17,13 +17,13 @@ export interface AppointmentSlot {
 
 export interface AppointmentSlotDetails {
   id: string;
-  therapist: Therapist;
+  patient: basicUserDto;
+  therapist: basicUserDto;
   startTime: string;
   endTime: string;
   status: AppointmentStatus;
-  procedure: Procedure;
+  procedureName: String;
   isPaid: boolean;
-  room: string;
   notes: string;
   medicalAdvice: string;
 }

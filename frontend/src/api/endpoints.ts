@@ -29,6 +29,7 @@ export const apiEndpoints = {
       `/appointments/available?therapistId=${therapistId}&localDate=${localDate}`,
     book: (id: string) => `/appointments/${id}/book`,
     myHistory: "/appointments/me/history",
+    myPlanned: "/appointments/me/planned",
     details: (id: string) => `/appointments/${id}`,
     // Doctor endpoints
     myScheduled: (startDate: string) =>

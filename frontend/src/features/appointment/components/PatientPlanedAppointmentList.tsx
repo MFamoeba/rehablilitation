@@ -3,7 +3,7 @@ import { Typography, CircularProgress, Alert, Box } from "@mui/material";
 import { appointmentService } from "../services/appointmentService";
 import type { AppointmentSlotDetails } from "../types";
 import AppointmentHistoryCard from "./AppointmentHistoryCard";
-export default function PatientAppointmentList() {
+export default function PatientPlanedAppointmentList() {
   const [appointments, setAppointments] = useState<AppointmentSlotDetails[]>(
     [],
   );
@@ -11,7 +11,7 @@ export default function PatientAppointmentList() {
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     appointmentService
-      .getMyAppointmentHistory()
+      .getMyPlannedAppointmets()
       .then((data) => {
         setAppointments(data);
         setLoading(false);

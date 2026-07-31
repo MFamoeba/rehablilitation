@@ -18,6 +18,8 @@ public interface AppointmentSlotRepository extends JpaRepository <AppointmentSlo
     List<AppointmentSlot> findByTherapistIdAndStartTimeBetween(UUID therapistId, LocalDateTime startDateTime, LocalDateTime endDateTime);
 
     List<AppointmentSlot> findByPatientId(UUID PatientId);
+    List<AppointmentSlot> findAllByPatientIdAndStartTimeBeforeOrderByStartTimeDesc(UUID patientId, LocalDateTime date);
+    List<AppointmentSlot> findAllByPatientIdAndStartTimeGreaterThanEqualOrderByStartTimeAsc(UUID patientId, LocalDateTime date);
 
     boolean existsByPatientIdAndTherapistId(UUID patientId, UUID id);
 }

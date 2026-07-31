@@ -24,6 +24,11 @@ export const appointmentService = {
       apiEndpoints.appointments.myHistory,
     );
   },
+  async getMyPlannedAppointmets(): Promise<AppointmentSlotDetails[]> {
+    return apiClient.get<AppointmentSlotDetails[]>(
+      apiEndpoints.appointments.myPlanned,
+    );
+  },
 
   async getMyScheduledAppointmentsForDate(
     localDate: string,

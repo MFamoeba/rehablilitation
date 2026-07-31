@@ -1,35 +1,14 @@
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Chip,
-  Divider,
-} from "@mui/material";
+import { Card, CardContent, Typography, Box, Divider } from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonIcon from "@mui/icons-material/Person";
-import MeetingRoomIcon from "@mui/icons-material/MeetingRoom";
 import NotesIcon from "@mui/icons-material/Notes";
-import type { AppointmentSlotDetails, AppointmentStatus } from "../types";
+import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
+import type { AppointmentSlotDetails } from "../types";
+import AppointmentStatusChip from "./AppointmentStatusChip";
 interface Props {
   appointment: AppointmentSlotDetails;
 }
-
-const getStatusConfig = (status: AppointmentStatus) => {
-  switch (status) {
-    case "OPEN":
-      return { label: "Dostępna", color: "info" as const };
-    case "PENDING":
-      return { label: "Oczekująca", color: "warning" as const };
-    case "CONFIRMED":
-      return { label: "Zaplanowana", color: "success" as const };
-    case "CANCELLED":
-      return { label: "Anulowana", color: "error" as const };
-    default:
-      return { label: status, color: "default" as const };
-  }
-};
 export default function AppointmentHistoryCard({ appointment }: Props) {
   const dateObj = new Date(appointment.startTime);
   const date = dateObj.toLocaleDateString("pl-PL");
@@ -37,15 +16,12 @@ export default function AppointmentHistoryCard({ appointment }: Props) {
     hour: "2-digit",
     minute: "2-digit",
   });
-
-  const statusConfig = getStatusConfig(appointment.status);
   return (
     <Card
       sx={{
         mb: 2,
         boxShadow: 2,
         borderRadius: 2,
-        borderLeft: `6px solid ${statusConfig.color === "success" ? "#2e7d32" : statusConfig.color === "error" ? "#d32f2f" : "#ed6c02"}`,
       }}
     >
       <CardContent>
@@ -64,13 +40,9 @@ export default function AppointmentHistoryCard({ appointment }: Props) {
           >
             <CalendarMonthIcon /> {date}
           </Typography>
-          <Chip
-            label={statusConfig.label}
-            color={statusConfig.color}
-            size="small"
-            sx={{ fontWeight: "bold" }}
-          />
+          <AppointmentStatusChip status={appointment.status} />
         </Box>
+
         <Box sx={{ display: "flex", flexWrap: "wrap", gap: 3, mb: 1.5 }}>
           <Typography
             variant="body1"
@@ -78,37 +50,45 @@ export default function AppointmentHistoryCard({ appointment }: Props) {
           >
             <AccessTimeIcon color="action" /> Godzina: <strong>{time}</strong>
           </Typography>
-          <Typography
-            variant="body1"
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <PersonIcon color="action" /> Terapeuta:{" "}
-            <strong>
-              {appointment.therapist.firstName} {appointment.therapist.lastName}
-            </strong>
-          </Typography>
 
-          {appointment.room && (
+          {appointment.therapist && (
             <Typography
               variant="body1"
               sx={{ display: "flex", alignItems: "center", gap: 1 }}
             >
-              <MeetingRoomIcon color="action" /> Gabinet:{" "}
-              <strong>{appointment.room}</strong>
+              <PersonIcon color="action" /> Terapeuta:{" "}
+              <strong>
+                {appointment.therapist.firstName}{" "}
+                {appointment.therapist.lastName}
+              </strong>
+            </Typography>
+          )}
+          {appointment.procedureName && (
+            <Typography
+              variant="body1"
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
+              <MedicalServicesIcon color="action" /> Zabieg:{" "}
+              <strong>{appointment.procedureName}</strong>
             </Typography>
           )}
         </Box>
-        {appointment.notes && (
+        {appointment.medicalAdvice && (
           <>
             <Divider sx={{ my: 1.5 }} />
-            <Box sx={{ backgroundColor: "#f9f9f9", p: 1.5, borderRadius: 1 }}>
+            <Box sx={{ backgroundColor: "#e3f2fd", p: 1.5, borderRadius: 1 }}>
               <Typography
                 variant="body2"
-                color="text.secondary"
-                sx={{ display: "flex", alignItems: "flex-start", gap: 1 }}
+                color="text.primary"
+                sx={{
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 1,
+                  fontWeight: 500,
+                }}
               >
-                <NotesIcon fontSize="small" />
-                <em>{appointment.notes}</em>
+                <NotesIcon fontSize="small" color="primary" />
+                Zalecenia: {appointment.medicalAdvice}
               </Typography>
             </Box>
           </>

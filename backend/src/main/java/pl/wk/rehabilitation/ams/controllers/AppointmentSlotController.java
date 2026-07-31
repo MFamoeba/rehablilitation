@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wk.rehabilitation.ams.dto.GetDetailedAppointmentSlotResponse;
 import pl.wk.rehabilitation.ams.dto.UpdateAppointmentDetailsRequest;
 import pl.wk.rehabilitation.ams.entity.Account;
 import pl.wk.rehabilitation.ams.entity.AppointmentSlot;
@@ -43,21 +44,27 @@ public class AppointmentSlotController {
 
     @PreAuthorize("hasRole('ROLE_USER'")
     @GetMapping("/me/history")
-    public ResponseEntity<List<AppointmentSlot>> getAppointmentHistory(Authentication authentication){
+    public ResponseEntity<List<GetDetailedAppointmentSlotResponse>> getAppointmentHistory(Authentication authentication){
         String username = authentication.getName();
         return ResponseEntity.ok(appointmentSlotService.getMyAppointmentHistory(username));
+    }
+    @PreAuthorize("hasRole('ROLE_USER'")
+    @GetMapping("/me/planned")
+    public ResponseEntity<List<GetDetailedAppointmentSlotResponse>> getAppointmentPlanned(Authentication authentication){
+        String username = authentication.getName();
+        return ResponseEntity.ok(appointmentSlotService.getMyAppointmentPlanned(username));
     }
 
     @PreAuthorize("hasRole('ROLE_DOCTOR')")
     @GetMapping("/patient/{patient_id}/history")
-    public ResponseEntity<List<AppointmentSlot>> getAppointmentHistoryForPatient(Authentication authentication, @PathVariable UUID patient_id){
+    public ResponseEntity<List<GetDetailedAppointmentSlotResponse>> getAppointmentHistoryForPatient(Authentication authentication, @PathVariable UUID patient_id){
         String username = authentication.getName();
         return ResponseEntity.ok(appointmentSlotService.getPatientAppointmentHistory(username, patient_id));
     }
 
     @GetMapping("/me/scheduled")
     @PreAuthorize("hasRole('ROLE_DOCTOR')")
-    public ResponseEntity<List<AppointmentSlot>> getScheduledAppointmentsForDate(
+    public ResponseEntity<List<GetDetailedAppointmentSlotResponse>> getScheduledAppointmentsForDate(
             Authentication authentication,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate){
         String username = authentication.getName();
@@ -78,7 +85,7 @@ public class AppointmentSlotController {
 
     @GetMapping("/{slotId}")
     @PreAuthorize("hasAnyRole('ROLE_DOCTOR', 'ROLE_PATIENT')")
-    public ResponseEntity<AppointmentSlot> getSlotDetails(
+    public ResponseEntity<GetDetailedAppointmentSlotResponse> getSlotDetails(
             Authentication authentication,
             @PathVariable UUID slotId) {
         String username = authentication.getName();

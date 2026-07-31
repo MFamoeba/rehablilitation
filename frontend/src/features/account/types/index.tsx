@@ -16,3 +16,11 @@ export interface updateUserAccountRequest {
 export interface changeRoleRequest {
   role: string;
 }
+
+export interface basicUserDto {
+  id: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phoneNumber: string;
+}

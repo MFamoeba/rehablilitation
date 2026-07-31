@@ -15,6 +15,7 @@ import TherapistAppointmentDetailsPage from "@/pages/TherapistAppointmentDetails
 import TherapistProfilePage from "@/pages/TherapistProfilePage";
 import TherapistWorkSchedulePage from "@/pages/ThreapistWorkSchedulePage";
 import ProcedureEditPage from "@/pages/ProcedureEditPage";
+import PattientPlannedAppointementPage from "@/pages/PatientPlannedAppointmentsPage";
 
 export const SinglePageRoutes: routeType[] = [
   { pathname: pathnames.unauth.login, page: LoginPage, name: "Zaloguj się" },
@@ -58,6 +59,11 @@ export const PatientRoutes: routeType[] = [
   {
     pathname: pathnames.patient.appointmentHistory,
     page: AppointmentHistoryPage,
+    name: "Historia Wizyt",
+  },
+  {
+    pathname: pathnames.patient.appointmentPlanned,
+    page: PattientPlannedAppointementPage,
     name: "Historia Wizyt",
   },
   {
