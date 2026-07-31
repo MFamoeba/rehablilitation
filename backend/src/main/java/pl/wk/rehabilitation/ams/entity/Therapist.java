@@ -19,7 +19,16 @@ public class Therapist extends AbstractEntity {
     @JoinColumn(name = "account_id")
     private Account account;
 
-    private String brief;
+    private String briefBio;
+    private String fullBio;
     private String specialization;
+
+    @ManyToMany
+    @JoinTable(
+            name = "therapist_procedures",
+            joinColumns = @JoinColumn(name = "therapist_id"),
+            inverseJoinColumns = @JoinColumn(name = "procedure_id")
+    )
+    private List<Procedure> procedures;
 
 }

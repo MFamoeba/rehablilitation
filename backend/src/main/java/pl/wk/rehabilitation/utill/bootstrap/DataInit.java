@@ -92,13 +92,15 @@ public class DataInit implements CommandLineRunner {
 
             Therapist therapist1 = Therapist.builder()
                     .account(therapistAccount1)
-                    .brief("Doświadczony fizjoterapeuta sportowy.")
+                    .briefBio("Doświadczony fizjoterapeuta sportowy.")
                     .specialization("Fizjoterapia")
+                    .procedures(List.of(p1, p2, p3, p4, p5))
                     .build();
             Therapist therapist2 = Therapist.builder()
                     .account(therapistAccount2)
-                    .brief("Specjalistka ds. masażu głębokiego.")
+                    .briefBio("Specjalistka ds. masażu głębokiego.")
                     .specialization("Masaż")
+                    .procedures(List.of(p1, p2, p3, p4, p5))
                     .build();
 
             therapistRepository.saveAll(List.of(therapist1, therapist2));

@@ -43,8 +43,10 @@ public class TherapistService {
     public GetTherapistsResponse updateTherapistDetails(String username, UpdateTherapistRequest therapistDetails) {
         Account account = accountRepository.findByEmail(username).orElseThrow();
         Therapist therapist = therapistRepository.findByAccountId(account.getId()).orElseThrow();
-        therapist.setBrief(therapistDetails.brief());
+        therapist.setBriefBio(therapistDetails.briefBio());
+        therapist.setFullBio(therapistDetails.fullBio());
         therapist.setSpecialization(therapistDetails.specialization());
+        therapist.setProcedures(therapistDetails.procedures());
         return therapistMapper.toGetTherapistsResponse(therapistRepository.save(therapist));
     }
 }

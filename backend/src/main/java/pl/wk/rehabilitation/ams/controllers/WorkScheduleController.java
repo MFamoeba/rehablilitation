@@ -2,11 +2,12 @@ package pl.wk.rehabilitation.ams.controllers;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
-import pl.wk.rehabilitation.ams.dto.WorkScheduleRequest;
+import pl.wk.rehabilitation.ams.dto.WorkScheduleItemDto;
 import pl.wk.rehabilitation.ams.service.WorkScheduleService;
 
-import java.util.UUID;
+import java.util.List;
 
 @RestController
 @RequestMapping("/schedules")
@@ -15,28 +16,16 @@ public class WorkScheduleController {
 
     private final WorkScheduleService workScheduleService;
 
-    @PostMapping("/default")
-    public ResponseEntity<Void> setDefaultWorkSchedule(@RequestBody WorkScheduleRequest workScheduleRequestDto) {
-        workScheduleService.updateWorkSchedule(workScheduleRequestDto);
-        return ResponseEntity.ok().build();
+    @PutMapping("/default")
+    public ResponseEntity<List<WorkScheduleItemDto>> setDefaultWorkSchedule(@RequestBody List<WorkScheduleItemDto> workScheduleItemDtos, Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(workScheduleService.updateWorkSchedule(workScheduleItemDtos, username));
     }
 
     @GetMapping("/default")
-    public ResponseEntity<WorkScheduleRequest> getDefaultWorkSchedule() {
-        return ResponseEntity.ok(workScheduleService.getWorkSchedule());
+    public ResponseEntity<List<WorkScheduleItemDto>> getDefaultWorkSchedule(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(workScheduleService.getWorkSchedule(username));
     }
-
-    //temporary todo remove
-    @PostMapping("/{therapist_id}/default")
-    public ResponseEntity<Void> setDefaultWorkSchedule(@RequestBody WorkScheduleRequest workScheduleRequestDto, @PathVariable UUID therapist_id) {
-        workScheduleService.updateWorkScheduleForTherapist(workScheduleRequestDto, therapist_id);
-        return ResponseEntity.ok().build();
-    }
-
-    @GetMapping("/{therapist_id}/default")
-    public ResponseEntity<WorkScheduleRequest> getDefaultWorkSchedule(@PathVariable UUID therapist_id) {
-        return ResponseEntity.ok(workScheduleService.getWorkScheduleForTherapist(therapist_id));
-    }
-
 
 }

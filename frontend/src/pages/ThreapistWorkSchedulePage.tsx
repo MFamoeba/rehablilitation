@@ -1,3 +1,5 @@
+import WorkScheduleEditor from "@/features/workschedule/components/WorkScheduleEditor";
+
 export default function TherapistWorkSchedulePage() {
-  return <h1>WorkSchedule</h1>;
+  return <WorkScheduleEditor />;
 }

@@ -16,6 +16,7 @@ export const apiEndpoints = {
     myDefault: "/schedules/default",
   },
   therapists: {
+    me: "/therapist/me",
     list: "/therapist",
     details: (id: string) => `/therapist/${id}`,
   },

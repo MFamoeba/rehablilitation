@@ -21,18 +21,14 @@ async function request<T>(
   const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
   const response = await fetch(`${API_BASE_URL}${cleanEndpoint}`, config);
   if (!response.ok) {
-    // todo obsługa globalnych błędów
     if (response.status === 401) {
       localStorage.removeItem("token");
     }
     const errorText = await response.text();
     throw new Error(errorText || `Błąd HTTP: ${response.status}`);
   }
-  // todo pusta w null
-  if (response.status === 204) {
-    return null as T;
-  }
-  return response.json();
+  const text = await response.text();
+  return text ? JSON.parse(text) : (null as T);
 }
 export const apiClient = {
   get: <T>(endpoint: string, options?: RequestInit) =>

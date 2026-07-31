@@ -48,7 +48,11 @@ public class AccountService {
         account.setRole(role);
         accountRepository.save(account);
         if (role == AccountRoleEnum.ROLE_DOCTOR) {
-            Therapist therapist = new Therapist(account, "Lorem ipsum", "dolor sit amet");
+            Therapist therapist = Therapist.builder()
+                    .account(account)
+                    .briefBio("Lorem ipsum")
+                    .specialization("dolor sit amet")
+                    .build();
             therapistRepository.save(therapist);
         }
 
