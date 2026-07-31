@@ -1,6 +1,10 @@
 import { apiClient } from "@/api/apiClient";
 import { apiEndpoints } from "@/api/endpoints";
-import type { AppointmentSlot, AppointmentSlotDetails } from "../types";
+import type {
+  AppointmentSlot,
+  AppointmentSlotDetails,
+  BookRequest,
+} from "../types";
 
 export const appointmentService = {
   async getAppointmentSlotsForDate(
@@ -12,10 +16,13 @@ export const appointmentService = {
     );
   },
 
-  async bookAppointmentSlot(slotId: string): Promise<AppointmentSlot> {
+  async bookAppointmentSlot(
+    slotId: string,
+    request: BookRequest,
+  ): Promise<AppointmentSlot> {
     return apiClient.post<AppointmentSlot>(
       apiEndpoints.appointments.book(slotId),
-      {},
+      request,
     );
   },
 

@@ -20,7 +20,10 @@ public class TherapistController {
     private final TherapistService therapistService;
 
     @GetMapping
-    public ResponseEntity<List<GetTherapistsResponse>> getAll() {
+    public ResponseEntity<List<GetTherapistsResponse>> getAll( @RequestParam(required = false) UUID procedureId) {
+        if (procedureId != null) {
+            return ResponseEntity.ok(therapistService.getAllByProcedureId(procedureId));
+        }
         return ResponseEntity.ok(therapistService.getAll());
     }
 

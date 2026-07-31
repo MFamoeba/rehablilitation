@@ -3,8 +3,10 @@ import { apiClient } from "@/api/apiClient";
 import { apiEndpoints } from "@/api/endpoints";
 
 export const therapistService = {
-  async getAllTherapists(): Promise<Therapist[]> {
-    return apiClient.get<Therapist[]>(apiEndpoints.therapists.list);
+  async getAllTherapists(procedureId?: string): Promise<Therapist[]> {
+    return apiClient.get<Therapist[]>(
+      apiEndpoints.therapists.list(procedureId),
+    );
   },
 
   async getTherapistDetails(id: string): Promise<Therapist> {

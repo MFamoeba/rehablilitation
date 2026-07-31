@@ -2,12 +2,18 @@ import { useEffect, useState } from "react";
 import { Box, Typography, CircularProgress, Alert } from "@mui/material";
 import AppointmentBookingCard from "./AppointmentBookingCard";
 import { appointmentService } from "../services/appointmentService";
-import type { AppointmentSlot } from "../types";
+import type { AppointmentSlot, BookRequest } from "../types";
 interface Props {
   therapistId: string;
+  procedureId: string;
   date: string;
 }
-export default function AppointmentBookingList({ therapistId, date }: Props) {
+
+export default function AppointmentBookingList({
+  therapistId,
+  procedureId,
+  date,
+}: Props) {
   const [slots, setSlots] = useState<AppointmentSlot[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,11 +37,18 @@ export default function AppointmentBookingList({ therapistId, date }: Props) {
       });
   }, [therapistId, date]);
   const handleBook = (slotId: string) => {
+    const request: BookRequest = {
+      procedureId: procedureId,
+    };
     appointmentService
-      .bookAppointmentSlot(slotId)
-      .then(() => alert("Rezerwacja udana!"))
+      .bookAppointmentSlot(slotId, request)
+      .then(() => {
+        alert("Rezerwacja udana!");
+        setSlots((prevSlots) => prevSlots.filter((slot) => slot.id !== slotId));
+      })
       .catch(() => alert("Błąd rezerwacji"));
   };
+
   if (!therapistId || !date) {
     return (
       <Typography variant="body2" color="text.secondary">

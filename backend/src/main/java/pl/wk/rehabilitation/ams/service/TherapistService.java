@@ -49,4 +49,10 @@ public class TherapistService {
         therapist.setProcedures(therapistDetails.procedures());
         return therapistMapper.toGetTherapistsResponse(therapistRepository.save(therapist));
     }
+
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public List<GetTherapistsResponse> getAllByProcedureId(UUID procedureId) {
+        System.out.println("----- PRZYSZŁO PROCEDURE ID: " + procedureId + " -----");
+        return therapistRepository.findAllByProceduresId(procedureId).stream().map(therapistMapper::toGetTherapistsResponse).toList();
+    }
 }

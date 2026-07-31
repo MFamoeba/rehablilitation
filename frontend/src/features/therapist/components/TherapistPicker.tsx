@@ -12,17 +12,20 @@ import { therapistService } from "../services/therapistService";
 interface TherapistSelectProps {
   value: string;
   onChange: (therapistId: string) => void;
+  procedureId?: string;
 }
+
 export default function TherapistPicker({
   value,
   onChange,
+  procedureId,
 }: TherapistSelectProps) {
   const [therapists, setTherapists] = useState<Therapist[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
     therapistService
-      .getAllTherapists()
+      .getAllTherapists(procedureId)
       .then((data) => {
         setTherapists(data);
         setLoading(false);
@@ -32,9 +35,11 @@ export default function TherapistPicker({
         setError("Nie udało się pobrać listy terapeutów.");
         setLoading(false);
       });
-  }, []);
+  }, [procedureId]);
+
   if (loading) return <CircularProgress size={24} />;
   if (error) return <Alert severity="error">{error}</Alert>;
+
   return (
     <FormControl fullWidth margin="normal">
       <InputLabel id="therapist-select-label">Wybierz terapeutę</InputLabel>

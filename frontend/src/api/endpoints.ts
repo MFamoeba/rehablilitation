@@ -17,7 +17,8 @@ export const apiEndpoints = {
   },
   therapists: {
     me: "/therapist/me",
-    list: "/therapist",
+    list: (procedureId?: string) =>
+      procedureId ? `/therapist?procedureId=${procedureId}` : "/therapist",
     details: (id: string) => `/therapist/${id}`,
   },
   procedures: {

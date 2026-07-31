@@ -15,6 +15,10 @@ export interface AppointmentSlot {
   endTime: string;
 }
 
+export interface BookRequest {
+  procedureId: string;
+}
+
 export interface AppointmentSlotDetails {
   id: string;
   patient: basicUserDto;

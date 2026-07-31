@@ -41,13 +41,13 @@ export default function TherapistCard({ therapist }: TherapistCardProps) {
             </Typography>
           </Stack>
         </Box>
-        {therapist.brief && (
+        {therapist.briefBio && (
           <Typography
             variant="body2"
             color="text.secondary"
             sx={{ flexGrow: 1, fontStyle: "italic" }}
           >
-            "{therapist.brief}"
+            "{therapist.briefBio}"
           </Typography>
         )}
       </CardContent>

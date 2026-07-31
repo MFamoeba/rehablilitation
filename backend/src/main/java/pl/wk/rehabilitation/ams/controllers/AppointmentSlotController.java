@@ -6,6 +6,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pl.wk.rehabilitation.ams.dto.BookAppointmentRequest;
 import pl.wk.rehabilitation.ams.dto.GetDetailedAppointmentSlotResponse;
 import pl.wk.rehabilitation.ams.dto.UpdateAppointmentDetailsRequest;
 import pl.wk.rehabilitation.ams.entity.Account;
@@ -37,9 +38,10 @@ public class AppointmentSlotController {
     @PostMapping("/{slotId}/book")
     public ResponseEntity<AppointmentSlot> bookAppointmentSlot(
             @PathVariable UUID slotId,
+            @RequestBody BookAppointmentRequest appointmentRequest,
             Authentication authentication){
         String username = authentication.getName();
-        return ResponseEntity.ok(appointmentSlotService.book(slotId, username));
+        return ResponseEntity.ok(appointmentSlotService.book(slotId, appointmentRequest, username));
     }
 
     @PreAuthorize("hasRole('ROLE_USER'")

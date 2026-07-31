@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pl.wk.rehabilitation.ams.converter.AppointmentSlotMapper;
+import pl.wk.rehabilitation.ams.dto.BookAppointmentRequest;
 import pl.wk.rehabilitation.ams.dto.GetDetailedAppointmentSlotResponse;
 import pl.wk.rehabilitation.ams.dto.UpdateAppointmentDetailsRequest;
 import pl.wk.rehabilitation.ams.entity.*;
@@ -18,10 +19,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -32,6 +30,7 @@ public class AppointmentSlotService {
     private final TherapistRepository therapistRepository;
     private final WorkScheduleRepository workScheduleRepository;
     private final AppointmentSlotMapper appointmentMapper;
+    private final ProcedureRepository procedureRepository;
     private final static Integer LENGTH_OF_SLOT_IN_MINUTES = 30;
 
     private Therapist getTherapistByUsername(String username) {
@@ -42,16 +41,23 @@ public class AppointmentSlotService {
     }
 
     @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
-    public AppointmentSlot book(UUID slotId, String username) {
+    public AppointmentSlot book(UUID slotId, BookAppointmentRequest bookAppointmentRequest, String username) {
         Account account = accountRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono konta."));
         AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId)
                         .orElseThrow(() -> new IllegalArgumentException("Nie znaleziono terminu."));
+        Procedure procedure = procedureRepository.findById(bookAppointmentRequest.procedureId()).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono terminu."));
+        Therapist therapist = appointmentSlot.getTherapist();
+
+        if (!therapist.getProcedures().contains(procedure)) {
+            throw new IllegalArgumentException("Ten lekarz nie wykonuje tej procedury.");
+        }
 
         if (appointmentSlot.getStatus() != AppointmentStatusEnum.OPEN) {
             throw new IllegalStateException("Slot is not open");
         }
         appointmentSlot.setPatient(account);
         appointmentSlot.setStatus(AppointmentStatusEnum.PENDING);
+        appointmentSlot.setProcedure(procedure);
         return appointmentSlotRepository.saveAndFlush(appointmentSlot);
     }
 
@@ -123,7 +129,6 @@ public class AppointmentSlotService {
         AppointmentSlot appointmentSlotToUpdate = appointmentSlotRepository.findById(slotId).orElseThrow();
         if (!appointmentSlotToUpdate.getTherapist().getId().equals(therapist.getId())) throw new AccessDeniedException("Nie masz dostępu do danych tego terminu.");
         appointmentSlotToUpdate.setStatus(updateAppointmentDetailsRequest.status());
-        appointmentSlotToUpdate.setRoom(updateAppointmentDetailsRequest.room());
         appointmentSlotToUpdate.setNotes(updateAppointmentDetailsRequest.notes());
 
         return appointmentSlotRepository.save(appointmentSlotToUpdate);
