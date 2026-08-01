@@ -131,6 +131,7 @@ public class AppointmentSlotService {
         if (!appointmentSlotToUpdate.getTherapist().getId().equals(therapist.getId())) throw new AccessDeniedException("Nie masz dostępu do danych tego terminu.");
         appointmentSlotToUpdate.setStatus(updateAppointmentDetailsRequest.status());
         appointmentSlotToUpdate.setNotes(updateAppointmentDetailsRequest.notes());
+        appointmentSlotToUpdate.setMedicalAdvice(updateAppointmentDetailsRequest.medicalAdvice());
 
         return appointmentSlotRepository.save(appointmentSlotToUpdate);
     }
