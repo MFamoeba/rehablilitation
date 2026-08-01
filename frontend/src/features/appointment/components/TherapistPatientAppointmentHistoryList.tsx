@@ -4,23 +4,25 @@ import DoctorAppointmentCard from "./DoctorAppointmentCard";
 import { appointmentService } from "../services/appointmentService";
 import type { AppointmentSlotDetails } from "../types";
 interface Props {
-  date: string;
+  patientId: string;
 }
 
-export default function DoctorAppointmentList({ date }: Props) {
+export default function TherapistPatientAppointmentHistoryList({
+  patientId,
+}: Props) {
   const [appointments, setAppointments] = useState<AppointmentSlotDetails[]>(
     [],
   );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   useEffect(() => {
-    if (!date) {
+    if (!patientId) {
       setAppointments([]);
       return;
     }
     setLoading(true);
     appointmentService
-      .getMyScheduledAppointmentsForDate(date)
+      .getMyPatientAppointmentHistory(patientId)
       .then((data) => {
         setAppointments(data);
         setLoading(false);
@@ -29,7 +31,7 @@ export default function DoctorAppointmentList({ date }: Props) {
         setError("Nie udało się pobrać historii wizyt.");
         setLoading(false);
       });
-  }, [date]);
+  }, []);
 
   const handleDelete = async (appointmentId: string) => {
     try {

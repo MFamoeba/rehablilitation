@@ -1,23 +1,37 @@
-import { useState } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Typography, Box, TextField, IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DoctorAppointmentsList from "@/features/appointment/components/DoctorAppointmentsList";
+import { buildTherapistAppointementListLink } from "@/routes/pathnames";
+
 export default function TherapistAppointmentsPage() {
+  const { appointmentDate } = useParams<{ appointmentDate?: string }>();
+  const navigate = useNavigate();
+
   const today = new Date().toISOString().split("T")[0];
-  const [date, setDate] = useState<string>(today);
+  const activeDate = appointmentDate || today;
+
   const handlePrevDay = () => {
-    if (!date) return;
-    const d = new Date(date);
+    const d = new Date(activeDate);
     d.setDate(d.getDate() - 1);
-    setDate(d.toISOString().split("T")[0]);
+    const newDate = d.toISOString().split("T")[0];
+    navigate(buildTherapistAppointementListLink(newDate));
   };
+
   const handleNextDay = () => {
-    if (!date) return;
-    const d = new Date(date);
+    const d = new Date(activeDate);
     d.setDate(d.getDate() + 1);
-    setDate(d.toISOString().split("T")[0]);
+    const newDate = d.toISOString().split("T")[0];
+    navigate(buildTherapistAppointementListLink(newDate));
   };
+
+  const handleDateChange = (newDate: string) => {
+    if (newDate) {
+      navigate(buildTherapistAppointementListLink(newDate));
+    }
+  };
+
   return (
     <Box sx={{ mt: 4, display: "flex", flexDirection: "column", gap: 3 }}>
       <Typography variant="h4" component="h1" gutterBottom color="primary">
@@ -37,8 +51,8 @@ export default function TherapistAppointmentsPage() {
         <TextField
           type="date"
           label="Data"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
+          value={activeDate}
+          onChange={(e) => handleDateChange(e.target.value)}
           fullWidth
           slotProps={{
             inputLabel: {
@@ -56,7 +70,7 @@ export default function TherapistAppointmentsPage() {
         </IconButton>
       </Box>
       <Box>
-        <DoctorAppointmentsList date={date} />
+        <DoctorAppointmentsList date={activeDate} />
       </Box>
     </Box>
   );

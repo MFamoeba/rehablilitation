@@ -81,15 +81,48 @@ export default function DoctorAppointmentCard({
             )}
           </Typography>
         </Box>
-        {appointment.procedureName && (
-          <Typography
-            variant="body1"
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <MedicalServicesIcon color="action" /> Zabieg:{" "}
-            <strong>{appointment.procedureName}</strong>
-          </Typography>
-        )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            mt: 1,
+          }}
+        >
+          {appointment.procedureName ? (
+            <Typography
+              variant="body1"
+              sx={{ display: "flex", alignItems: "center", gap: 1 }}
+            >
+              <MedicalServicesIcon color="action" /> Zabieg:{" "}
+              <strong>{appointment.procedureName}</strong>
+            </Typography>
+          ) : (
+            <Box />
+          )}
+          {appointment.patient ? (
+            <Button
+              size="small"
+              variant="contained"
+              startIcon={<EditIcon />}
+              onClick={() =>
+                navigate(buildTherapistAppointmentLink(appointment.id))
+              }
+            >
+              Szczegóły / Edycja
+            </Button>
+          ) : (
+            <Button
+              size="small"
+              variant="outlined"
+              color="error"
+              startIcon={<DeleteIcon />}
+              onClick={() => onDelete && onDelete(appointment.id)}
+            >
+              Usuń wolny slot
+            </Button>
+          )}
+        </Box>
         {appointment.notes && (
           <>
             <Divider sx={{ my: 1.5 }} />
@@ -121,29 +154,6 @@ export default function DoctorAppointmentCard({
           </>
         )}
       </CardContent>
-      <Divider />
-      {appointment.patient ? (
-        <Button
-          size="small"
-          variant="contained"
-          startIcon={<EditIcon />}
-          onClick={() =>
-            navigate(buildTherapistAppointmentLink(appointment.id))
-          }
-        >
-          Szczegóły / Edycja
-        </Button>
-      ) : (
-        <Button
-          size="small"
-          variant="outlined"
-          color="error"
-          startIcon={<DeleteIcon />}
-          onClick={() => onDelete && onDelete(appointment.id)}
-        >
-          Usuń wolny slot
-        </Button>
-      )}
     </Card>
   );
 }

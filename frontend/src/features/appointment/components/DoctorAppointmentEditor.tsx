@@ -20,6 +20,7 @@ import type {
   UpdateAppointmentSlotDetails,
 } from "../types";
 import { appointmentService } from "../services/appointmentService";
+import TherapistPatientAppointmentHistoryList from "./TherapistPatientAppointmentHistoryList";
 interface AppointmentSlotEditorProps {
   appointmentId: string;
   onSuccess?: () => void;
@@ -35,7 +36,7 @@ export default function AppointmentSlotEditor({
   const [isSaving, setIsSaving] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [formData, setFormData] = useState<UpdateAppointmentSlotDetails>({
-    status: "OPEN",
+    status: "SCHEDULED",
     isPaid: false,
     notes: "",
     medicalAdvice: "",
@@ -161,8 +162,6 @@ export default function AppointmentSlotEditor({
                   label="Status"
                   onChange={(e) => handleChange("status", e.target.value)}
                 >
-                  <MenuItem value="OPEN">Otwarte (OPEN)</MenuItem>
-                  <MenuItem value="PENDING">Oczekujące (PENDING)</MenuItem>
                   <MenuItem value="SCHEDULED">Zaplanowane (SCHEDULED)</MenuItem>
                   <MenuItem value="COMPLETED">Zakończone (COMPLETED)</MenuItem>
                   <MenuItem value="PATIENT_ABSENT">
@@ -214,6 +213,11 @@ export default function AppointmentSlotEditor({
           </Box>
         </Box>
       </form>
+      <Box>
+        <TherapistPatientAppointmentHistoryList
+          patientId={appointment.patient.id}
+        />
+      </Box>
     </Paper>
   );
 }

@@ -50,7 +50,7 @@ export const appointmentService = {
     appointmentId: string,
     updatedData: UpdateAppointmentSlotDetails,
   ): Promise<AppointmentSlotDetails> {
-    return apiClient.put<AppointmentSlotDetails>(
+    return apiClient.patch<AppointmentSlotDetails>(
       apiEndpoints.appointments.update(appointmentId),
       updatedData,
     );
@@ -74,6 +74,14 @@ export const appointmentService = {
   ): Promise<AppointmentSlotDetails[]> {
     return apiClient.get<AppointmentSlotDetails[]>(
       apiEndpoints.appointments.myScheduled(localDate),
+    );
+  },
+
+  async getMyPatientAppointmentHistory(
+    patientId: string,
+  ): Promise<AppointmentSlotDetails[]> {
+    return apiClient.get<AppointmentSlotDetails[]>(
+      apiEndpoints.appointments.patientHistory(patientId),
     );
   },
 };

@@ -1,6 +1,9 @@
 import { Outlet, useNavigate, useLocation } from "react-router-dom";
 import { useAccountState } from "@/features/auth/context/AccountStateContext";
-import { pathnames } from "@/routes/pathnames";
+import {
+  buildTherapistAppointementListLink,
+  pathnames,
+} from "@/routes/pathnames";
 import {
   Box,
   Drawer,
@@ -51,7 +54,7 @@ const doctorNavItems = [
   },
   {
     name: "Wizyty",
-    path: pathnames.therapist.appointmentHistory,
+    path: buildTherapistAppointementListLink(),
     icon: <History />,
   },
 ];

@@ -1,6 +1,4 @@
 import type { basicUserDto } from "@/features/account/types";
-import type { Procedure } from "@/features/procedures/types";
-import type { Therapist } from "@/features/therapist/types";
 
 export type AppointmentStatus =
   | "OPEN"

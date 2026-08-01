@@ -21,7 +21,7 @@ export const pathnames = {
   therapist: {
     therapistsProfile: "/therapist/me",
     workSchedule: "/therapist/me/work-schedule",
-    appointmentHistory: "/appointments/me/history",
+    appointmentHistory: "/appointments/me/history/:appointmentDate?",
     appointmentDetails: "/appointments/:appointmentId",
   },
   admin: {
@@ -29,7 +29,10 @@ export const pathnames = {
     procedures: "/admin/procedures",
   },
 };
-export const buildPatientAppointmentLink = (id: string | number) =>
-  `/history/${id}`;
-export const buildTherapistAppointmentLink = (id: string | number) =>
+export const buildPatientAppointmentLink = (id: string) => `/history/${id}`;
+export const buildTherapistAppointmentLink = (id: string) =>
   `/appointments/${id}`;
+export const buildTherapistAppointementListLink = (appointmentDate?: string) =>
+  appointmentDate
+    ? `/appointments/me/history/${appointmentDate}`
+    : "/appointments/me/history";
