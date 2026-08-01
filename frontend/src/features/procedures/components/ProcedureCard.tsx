@@ -1,4 +1,4 @@
-import { Box, Card, CardContent, Stack, Typography } from "@mui/material";
+import { Box, Card, CardContent, Typography, Divider } from "@mui/material";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import type { Procedure } from "../types";
 interface ProcedureCardProps {
@@ -11,6 +11,8 @@ export default function ProcedureCard({ procedure }: ProcedureCardProps) {
         height: "100%",
         boxShadow: 3,
         borderRadius: 3,
+        display: "flex",
+        flexDirection: "column",
         transition: "transform 0.2s, box-shadow 0.2s",
         "&:hover": {
           transform: "translateY(-4px)",
@@ -24,31 +26,72 @@ export default function ProcedureCard({ procedure }: ProcedureCardProps) {
           flexDirection: "column",
           height: "100%",
           gap: 2,
+          p: 3,
         }}
       >
-        <Box>
-          <Typography variant="h5" sx={{ fontWeight: "bold", color: "#333" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            gap: 2,
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{ fontWeight: "bold", color: "text.primary" }}
+          >
             {procedure.name}
           </Typography>
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{ mt: 0.5, color: "#1976d2", alignItems: "center" }}
+          <Box
+            sx={{
+              p: 1,
+              borderRadius: 2,
+              bgcolor: "primary.50",
+              display: "flex",
+            }}
           >
-            <MedicalServicesIcon fontSize="small" />
-            <Typography variant="subtitle2" sx={{ fontWeight: "medium" }}>
-              {procedure.description}
-            </Typography>
-          </Stack>
+            <MedicalServicesIcon color="primary" />
+          </Box>
         </Box>
-        {procedure.price !== undefined && (
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ flexGrow: 1, fontStyle: "italic" }}
-          >
-            "${procedure.price.toFixed(2)}"
-          </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{
+            flexGrow: 1,
+            whiteSpace: "pre-line",
+            lineHeight: 1.6,
+          }}
+        >
+          {procedure.description}
+        </Typography>
+        {/* STOPKA: Cena zabiegu */}
+        {procedure.price !== undefined && procedure.price > 0 && (
+          <Box sx={{ mt: 2 }}>
+            <Divider sx={{ mb: 2 }} />
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                variant="subtitle2"
+                color="text.secondary"
+                sx={{ fontWeight: "medium" }}
+              >
+                Cena zabiegu
+              </Typography>
+              <Typography
+                variant="h6"
+                color="primary.main"
+                sx={{ fontWeight: "bold" }}
+              >
+                {procedure.price.toFixed(2)} PLN
+              </Typography>
+            </Box>
+          </Box>
         )}
       </CardContent>
     </Card>
