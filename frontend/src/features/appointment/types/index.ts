@@ -31,3 +31,10 @@ export interface AppointmentSlotDetails {
   notes: string;
   medicalAdvice: string;
 }
+
+export interface UpdateAppointmentSlotDetails {
+  status: AppointmentStatus;
+  isPaid: boolean;
+  notes: string;
+  medicalAdvice: string;
+}

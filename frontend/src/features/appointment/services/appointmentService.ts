@@ -4,6 +4,7 @@ import type {
   AppointmentSlot,
   AppointmentSlotDetails,
   BookRequest,
+  UpdateAppointmentSlotDetails,
 } from "../types";
 
 export const appointmentService = {
@@ -34,6 +35,37 @@ export const appointmentService = {
   async getMyPlannedAppointmets(): Promise<AppointmentSlotDetails[]> {
     return apiClient.get<AppointmentSlotDetails[]>(
       apiEndpoints.appointments.myPlanned,
+    );
+  },
+
+  async getAppointmentDetails(
+    appointmentId: string,
+  ): Promise<AppointmentSlotDetails> {
+    return apiClient.get<AppointmentSlotDetails>(
+      apiEndpoints.appointments.details(appointmentId),
+    );
+  },
+
+  async updateAppointmentDetails(
+    appointmentId: string,
+    updatedData: UpdateAppointmentSlotDetails,
+  ): Promise<AppointmentSlotDetails> {
+    return apiClient.put<AppointmentSlotDetails>(
+      apiEndpoints.appointments.update(appointmentId),
+      updatedData,
+    );
+  },
+
+  async cancelAppointment(appointmentId: string): Promise<void> {
+    return apiClient.patch<void>(
+      apiEndpoints.appointments.cancel(appointmentId),
+      {},
+    );
+  },
+
+  async deleteAppointment(appointmentId: string): Promise<void> {
+    return apiClient.delete<void>(
+      apiEndpoints.appointments.delete(appointmentId),
     );
   },
 

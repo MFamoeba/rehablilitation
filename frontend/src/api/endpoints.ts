@@ -39,7 +39,8 @@ export const apiEndpoints = {
       `/appointments/me/generate?startDate=${startDate}&endDate=${endDate}`,
     patientHistory: (patientId: string) =>
       `/appointments/patient/${patientId}/history`,
+    cancel: (id: string) => `/appointments/${id}/cancel`,
+    delete: (id: string) => `/appointments/${id}/delete`,
     update: (id: string) => `/appointments/${id}`,
-    delete: (id: string) => `/appointments/${id}`,
   },
 };

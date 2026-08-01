@@ -37,7 +37,7 @@ public class AppointmentSlot extends AbstractEntity {
     private String room;
     @Column(length = 1024)
     private String notes;
-
+    @Column(length = 1024)
     private String medicalAdvice;
 
 

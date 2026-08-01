@@ -1,15 +1,32 @@
-import { Card, CardContent, Typography, Box, Divider } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Box,
+  Divider,
+  Button,
+} from "@mui/material";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import PersonIcon from "@mui/icons-material/Person";
 import MedicalServicesIcon from "@mui/icons-material/MedicalServices";
 import NotesIcon from "@mui/icons-material/Notes";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
 import type { AppointmentSlotDetails } from "../types";
 import AppointmentStatusChip from "./AppointmentStatusChip";
+import { buildTherapistAppointmentLink } from "@/routes/pathnames";
+import { useNavigate } from "react-router-dom";
+
 interface Props {
   appointment: AppointmentSlotDetails;
+  onDelete?: (appointmentId: string) => void;
 }
-export default function DoctorAppointmentCard({ appointment }: Props) {
+export default function DoctorAppointmentCard({
+  appointment,
+  onDelete,
+}: Props) {
+  const navigate = useNavigate();
   const dateObj = new Date(appointment.startTime);
   const date = dateObj.toLocaleDateString("pl-PL");
   const time = dateObj.toLocaleTimeString("pl-PL", {
@@ -104,6 +121,29 @@ export default function DoctorAppointmentCard({ appointment }: Props) {
           </>
         )}
       </CardContent>
+      <Divider />
+      {appointment.patient ? (
+        <Button
+          size="small"
+          variant="contained"
+          startIcon={<EditIcon />}
+          onClick={() =>
+            navigate(buildTherapistAppointmentLink(appointment.id))
+          }
+        >
+          Szczegóły / Edycja
+        </Button>
+      ) : (
+        <Button
+          size="small"
+          variant="outlined"
+          color="error"
+          startIcon={<DeleteIcon />}
+          onClick={() => onDelete && onDelete(appointment.id)}
+        >
+          Usuń wolny slot
+        </Button>
+      )}
     </Card>
   );
 }

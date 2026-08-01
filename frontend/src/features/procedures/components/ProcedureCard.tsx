@@ -65,7 +65,6 @@ export default function ProcedureCard({ procedure }: ProcedureCardProps) {
         >
           {procedure.description}
         </Typography>
-        {/* STOPKA: Cena zabiegu */}
         {procedure.price !== undefined && procedure.price > 0 && (
           <Box sx={{ mt: 2 }}>
             <Divider sx={{ mb: 2 }} />

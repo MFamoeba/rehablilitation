@@ -18,7 +18,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -93,8 +92,10 @@ public class AppointmentSlotService {
         appointmentSlotsToSave.clear();
     }
 
-    public void deleteSlot(UUID slotId, UUID account_id) {
-        Therapist therapist = therapistRepository.findByAccountId(account_id).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono lekarza."));
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public void deleteSlot(UUID slotId, String username) {
+        Account account = accountRepository.findByEmail(username).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono lekarza."));
+        Therapist therapist = therapistRepository.findByAccountId(account.getId()).orElseThrow(() -> new IllegalArgumentException("Nie znaleziono lekarza."));
         AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId).orElseThrow();
 
         if (!appointmentSlot.getTherapist().getId().equals(therapist.getId())) {
@@ -177,10 +178,22 @@ public class AppointmentSlotService {
         LocalDateTime today = LocalDateTime.now();
     return appointmentSlotRepository.findAllByPatientIdAndStartTimeBeforeOrderByStartTimeDesc(patientId, today).stream().map(appointmentMapper::toDetailedResponse).toList();
     }
-
+    @Transactional(readOnly = true, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
     public List<GetDetailedAppointmentSlotResponse> getMyAppointmentPlanned(String username) {
         Account account = accountRepository.findByEmail(username).orElseThrow();
         LocalDateTime today = LocalDateTime.now();
         return appointmentSlotRepository.findAllByPatientIdAndStartTimeGreaterThanEqualOrderByStartTimeAsc(account.getId(), today).stream().map(appointmentMapper::toDetailedResponse).toList();
+    }
+
+    @Transactional(readOnly = false, propagation = Propagation.REQUIRES_NEW, rollbackFor = {Exception.class}, timeoutString = "${transaction.timeout}")
+    public void cancelAppointment(UUID slotId, String username) {
+        Account account = accountRepository.findByEmail(username).orElseThrow();
+        AppointmentSlot appointmentSlot = appointmentSlotRepository.findById(slotId).orElseThrow();
+        if (!account.equals(appointmentSlot.getPatient())){
+            throw new AccessDeniedException("Nie możesz usunąć wizyty która nie jest przypisana do ciebie");
+        }
+        appointmentSlot.setPatient(null);
+        appointmentSlot.setProcedure(null);
+        appointmentSlot.setStatus(AppointmentStatusEnum.OPEN);
     }
 }

@@ -104,12 +104,21 @@ public class AppointmentSlotController {
         return ResponseEntity.ok(appointmentSlotService.updateAppointmentDetails(username, slotId, updateAppointmentDetailsRequest));
     }
 
-    @DeleteMapping("/{slotId}")
+    @DeleteMapping("/{slotId}/delete")
     @PreAuthorize("hasRole('ROLE_DOCTOR')")
     public ResponseEntity<Void> deleteSlot(@PathVariable UUID slotId,
                                            Authentication authentication) {
-        Account account = (Account) authentication.getPrincipal();
-        appointmentSlotService.deleteSlot(slotId, account.getId());
+        String username = authentication.getName();
+        appointmentSlotService.deleteSlot(slotId, username);
+        return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/{slotId}/cancel")
+    @PreAuthorize("hasRole('ROLE_USER')")
+    public ResponseEntity<Void> cancelAppointment(@PathVariable UUID slotId,
+                                           Authentication authentication) {
+        String username = authentication.getName();
+        appointmentSlotService.cancelAppointment(slotId, username);
         return ResponseEntity.ok().build();
     }
 
